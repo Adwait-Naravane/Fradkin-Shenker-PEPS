@@ -30,8 +30,8 @@ end
 
 H = Kitaev_heisenberg(InfiniteSquare(2,2); ϕ=pi, h=0)
 
-D = 4
-χ = 12
+D = 5
+χ = 25
 
 A = TensorMap(randn, ComplexF64, ℂ^2 ← ℂ^D⊗ℂ^D⊗(ℂ^D)'⊗(ℂ^1)')
 B = TensorMap(randn, ComplexF64, ℂ^2 ← ℂ^D⊗ℂ^1⊗(ℂ^D)'⊗(ℂ^D)')
@@ -49,7 +49,7 @@ env_init = leading_boundary(CTMRGEnv(Ψ, ComplexSpace(χ)), Ψ, ctm_alg);
 
 result = fixedpoint(Ψ, H, opt_alg, env_init)
 
-file = jldopen("Kitaev_heisenberg_phi=180_h=0.jld2", "w")
+file = jldopen("Kitaev_heisenberg_D=5_chi=25_phi=180_h=0.jld2", "w")
 file["result"] = result
 close(file)
 
