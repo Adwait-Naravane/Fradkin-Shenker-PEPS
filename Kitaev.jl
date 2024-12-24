@@ -3,6 +3,7 @@ using PEPSKit
 using TensorKit
 using KrylovKit
 using OptimKit
+using JLD2
 
 function Kitaev_heisenberg(lattice::InfiniteSquare; kwargs...)
     return Kitaev_heisenberg(ComplexF64, Trivial, lattice; kwargs...)    
@@ -27,7 +28,7 @@ function Kitaev_heisenberg(T::Type{<:Number},
 
 end
 
-H = Kitaev_heisenberg(InfiniteSquare(2,2); ϕ=0, h=0)
+H = Kitaev_heisenberg(InfiniteSquare(2,2); ϕ=pi, h=0)
 
 D = 4
 χ = 12
@@ -47,3 +48,11 @@ opt_alg = PEPSOptimize(;
 env_init = leading_boundary(CTMRGEnv(Ψ, ComplexSpace(χ)), Ψ, ctm_alg);
 
 result = fixedpoint(Ψ, H, opt_alg, env_init)
+
+file = jldopen("Kitaev_heisenberg_phi=180_h=0.jld2", "w")
+file["result"] = result
+close(file)
+
+file = jldopen("Kitaev_heisenberg_phi=180_h=0.jld2", "r")
+result = file["result"]
+close(file)
