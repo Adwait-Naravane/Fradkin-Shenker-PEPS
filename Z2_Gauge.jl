@@ -8,6 +8,18 @@ symm = Z2Irrep
 # initialize states
 
 
+function Fradkin_Shenker(lattice::InfiniteSquare; kwargs...)
+    return Fradkin_Shenker(ComplexF64, Trivial, lattice; kwargs...)    
+end
+
+function Fradkin_Shenker(T::Type{<:Number},
+    S::Type{<:Sector},
+    lattice::InfiniteSquare; Jx::Number, Jz::Number, hx::Number, hz::Number)
+
+    
+
+end
+
 ψ = gauge_inv_peps(P, D, symm)
 ctm_alg = CTMRG()
 opt_alg = PEPSOptimize(;
