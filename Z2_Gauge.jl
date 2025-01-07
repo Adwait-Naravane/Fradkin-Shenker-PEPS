@@ -149,7 +149,7 @@ end
 
 
 
-H = Fradkin_Shenker(InfiniteSquare(2,2); Jx=1, Jz=1, hx=0, hz=0, pdim=2, vdim=4)
+H = Fradkin_Shenker(InfiniteSquare(2,2); Jx=1, Jz=0, hx=0, hz=0, pdim=2, vdim=4)
 
 
 Ψ = gauge_inv_peps(P, D, symm)
@@ -162,3 +162,9 @@ opt_alg = PEPSOptimize(;
 
 env_init = leading_boundary(CTMRGEnv(Ψ, Z2Space(0 => χ/2, 1 => χ/2)), Ψ, ctm_alg);
 
+result = fixedpoint(Ψ, H, opt_alg, env_init)
+
+
+file = jldopen("Initial_Psi.jld2", "w")
+file["Ψ"] = Ψ
+close(file)
