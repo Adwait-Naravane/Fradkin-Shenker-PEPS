@@ -51,15 +51,7 @@ env_init = leading_boundary(CTMRGEnv(Ψ, ComplexSpace(χ)), Ψ, ctm_alg);
 
 result = fixedpoint(Ψ, H, opt_alg, env_init)
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 file = jldopen("Kitaev_heisenberg_D=4_chi=24_ABBA_phi=0_h=0.jld2", "w")
-=======
-file = jldopen("Kitaev_heisenberg_D=4_chi=24_ABBA_phi=90_h=0_correct.jld2", "w")
->>>>>>> 1f2609a (Benchmarking Kitaev-Heisenberg ground states for AFM, FM and SL phases)
-=======
-file = jldopen("Kitaev_heisenberg_D=4_chi=24_ABBA_phi=90_h=0_correct.jld2", "w")
->>>>>>> 1f2609aa4083cd4a0a9b3c43ae67a2112316efd5
 file["result"] = result
 close(file)
 
