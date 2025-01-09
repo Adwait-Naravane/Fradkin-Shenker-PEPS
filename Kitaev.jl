@@ -43,7 +43,7 @@ B = TensorMap(randn, ComplexF64, ℂ^2 ← ℂ^D⊗ℂ^1⊗(ℂ^D)'⊗(ℂ^D)')
 ctm_alg = CTMRG()
 opt_alg = PEPSOptimize(;
     boundary_alg=ctm_alg,
-    optimizer=LBFGS(3; gradtol=1e-4, verbosity=2),
+    optimizer=LBFGS(3; gradtol=1e-3, verbosity=2),
     gradient_alg=LinSolver(; iterscheme=:diffgauge),
 )
 
