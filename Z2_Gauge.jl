@@ -310,11 +310,12 @@ reuse_env = true
 #     # @assert !isnan(norm(∂E∂v))
 #     return E, ∂E∂A
 # end
+new_Ψ = peps_Gauge(A, Be, Bo)
 
 
-
-file = jldopen("Initial_Psi.jld2", "w")
-file["Ψ"] = Ψ
+file = jldopen("final_Psi.jld2", "w")
+file["Ψ"] = new_Ψ
+file["env"] = env
 close(file)
 
 Ψ = peps_Gauge(A, Be, Bo)
