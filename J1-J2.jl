@@ -6,9 +6,9 @@ using KrylovKit
 using OptimKit
 
 # initialize parameters
-χbond = 2
-χenv = 12
-ctm_alg = CTMRG()
+χbond = 4
+χenv = 24
+ctm_alg = CTMRG(verbosity = 3)
 opt_alg = PEPSOptimize(;
     boundary_alg=ctm_alg,
     optimizer=LBFGS(4; gradtol=1e-3, verbosity=2),

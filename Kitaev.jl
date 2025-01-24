@@ -32,18 +32,18 @@ end
 
 H = Kitaev_heisenberg(InfiniteSquare(2,2); ϕ=90, h=0)
 
-D = 4
-χ = 24
+D = 6
+χ = 36
 
 A = TensorMap(randn, ComplexF64, ℂ^2 ← ℂ^D⊗ℂ^D⊗(ℂ^D)'⊗(ℂ^1)')
 B = TensorMap(randn, ComplexF64, ℂ^2 ← ℂ^D⊗ℂ^1⊗(ℂ^D)'⊗(ℂ^D)')
 
 Ψ = InfinitePEPS([A B; B A])
 
-ctm_alg = CTMRG()
+ctm_alg = CTMRG(verbosity = 3)
 opt_alg = PEPSOptimize(;
     boundary_alg=ctm_alg,
-    optimizer=LBFGS(3; gradtol=1e-4, verbosity=2),
+    optimizer=LBFGS(3; gradtol=1e-3, verbosity=3),
     gradient_alg=LinSolver(; iterscheme=:diffgauge),
 )
 
@@ -51,7 +51,7 @@ env_init = leading_boundary(CTMRGEnv(Ψ, ComplexSpace(χ)), Ψ, ctm_alg);
 
 result = fixedpoint(Ψ, H, opt_alg, env_init)
 
-file = jldopen("Kitaev_heisenberg_D=4_chi=24_ABBA_phi=0_h=0.jld2", "w")
+file = jldopen("Kitaev_heisenberg_D=4_chi=24_ABBA_phi=90_h=0.jld2", "w")
 file["result"] = result
 close(file)
 

@@ -13,10 +13,7 @@ using ChainRulesCore
 using Dates
 using JLD2
 using PEPSKit: PEPSTensor, CTMRGEnv, NORTH, SOUTH, WEST, EAST, NORTHWEST, NORTHEAST, SOUTHEAST, SOUTHWEST, _prev, _next, GradMode
-χ = 24 # environment bond dimension
-D = 4 # PEPS bond dimension
-P = 2 # PEPS physical dimension
-symm = Z2Irrep
+
 
 # initialize states
 
@@ -127,44 +124,204 @@ function gauge_inv_peps(pdim::Int, vdim::Int, ::Type{Z2Irrep})
     BD = TensorMap(zeros, ComplexF64, PB ← V ⊗ II ⊗ (V)' ⊗ (II)')
     T = TensorMap(ones, ComplexF64, II ← II ⊗ II ⊗ (II)' ⊗ (II)')
 
+    Be = diagm(diag(rand(ComplexF64,v,v)))
+    Bo = diagm(diag(rand(ComplexF64,v,v)))
+
     for (s, f) in fusiontrees(BW)
         if f.uncoupled[2] == Irrep[ℤ₂](0)
-            BW[s, f][1, 1, :, 1, :] = Matrix{ComplexF64}(I, v, v)
+            BW[s, f][1, 1, :, 1, :] = Be
         else
-            BW[s, f][2, 1, :, 1, :] = Matrix{ComplexF64}(I, v, v)
+            BW[s, f][2, 1, :, 1, :] = Bo
         end
     end
 
     for (s, f) in fusiontrees(BD)
         if f.uncoupled[1] == Irrep[ℤ₂](0)
-            BD[s, f][1, :, 1, :, 1] = Matrix{ComplexF64}(I, v, v)
+            BD[s, f][1, :, 1, :, 1] = Be
         else
-            BD[s, f][2, :, 1, :, 1] = Matrix{ComplexF64}(I, v, v)
+            BD[s, f][2, :, 1, :, 1] = Bo
+        end
+    end
+
+    return InfinitePEPS([A BW; BD T]), A, Be, Bo
+end
+
+function peps_Gauge(A::PEPSTensor, Be::Vector{Float64}, Bo::Vector{Float64})
+    p = 1
+    v = Int(D / 2)
+
+    PB = Z2Space(0 => 2*p)
+    V = Z2Space(0 => v, 1 => v)
+    II = Z2Space(0 => 1)
+
+    BW = TensorMap(zeros, ComplexF64, PB ← II ⊗ V ⊗ (II)' ⊗ (V)')
+    BD = TensorMap(zeros, ComplexF64, PB ← V ⊗ II ⊗ (V)' ⊗ (II)')
+    T = TensorMap(ones, ComplexF64, II ← II ⊗ II ⊗ (II)' ⊗ (II)')
+
+    for (s, f) in fusiontrees(BW)
+        if f.uncoupled[2] == Irrep[ℤ₂](0)
+            BW[s, f][1, 1, :, 1, :] = diagm(Be)
+        else
+            BW[s, f][2, 1, :, 1, :] = diagm(Bo)
+        end
+    end
+
+    for (s, f) in fusiontrees(BD)
+        if f.uncoupled[1] == Irrep[ℤ₂](0)
+            BD[s, f][1, :, 1, :, 1] = diagm(Be)
+        else
+            BD[s, f][2, :, 1, :, 1] = diagm(Bo)
         end
     end
 
     return InfinitePEPS([A BW; BD T])
 end
 
+function ChainRulesCore.rrule(::typeof(peps_Gauge), A::PEPSTensor, Be::Vector{Float64}, Bo::Vector{Float64})
+    Ψ = peps_Gauge(A, Be, Bo)
+
+    function peps_Gauge_pullback(dΨ)
+        dA = dΨ[1, 1]
+        dBW = dΨ[1, 2]
+
+        trees = collect(fusiontrees(dBW))
+        te = only(filter(((s, f),) -> f.uncoupled[2] == Irrep[ℤ₂](0), trees))
+        to = only(filter(((s, f),) -> f.uncoupled[2] == Irrep[ℤ₂](1), trees))
+        dBe = diag(dBW[te[1], te[2]][1, 1, :, 1, :])
+        dBo = diag(dBW[to[1], to[2]][2, 1, :, 1, :])    
+
+        return NoTangent(), dA, real(dBe), real(dBo)
+    end
+    return Ψ, peps_Gauge_pullback
+end
 
 
+χ = 16 # environment bond dimension
+D = 4 # PEPS bond dimension
+P = 2 # PEPS physical dimension
+p = P/2
+v = Int(D / 2)
+symm = Z2Irrep
 
-H = Fradkin_Shenker(InfiniteSquare(2,2); Jx=1, Jz=0, hx=0, hz=0, pdim=2, vdim=4)
+H = Fradkin_Shenker(InfiniteSquare(2,2); Jx=1, Jz=0, hx=1, hz=0, pdim=2, vdim=4)
 
+PA = Z2Space(0 => p, 1 => p)
+V = Z2Space(0 => v, 1 => v)
+A = TensorMap(randn, ComplexF64, PA ← V ⊗ V ⊗ V' ⊗ V')
+Be = diag(rand(Float64,v,v))
+Bo = diag(rand(Float64,v,v))
 
-Ψ = gauge_inv_peps(P, D, symm)
-ctm_alg = CTMRG()
+Ψ = peps_Gauge(A, Be, Bo)
+ctm_alg = CTMRG(verbosity = 4)
 opt_alg = PEPSOptimize(;
     boundary_alg=ctm_alg,
     optimizer=LBFGS(4; gradtol=1e-3, verbosity=2),
     gradient_alg=LinSolver(; iterscheme=:diffgauge),
 )
 
-env_init = leading_boundary(CTMRGEnv(Ψ, Z2Space(0 => χ/2, 1 => χ/2)), Ψ, ctm_alg);
+env_init = leading_boundary(CTMRGEnv(Ψ, Z2Space(0 => χ)), Ψ, ctm_alg);
 
-result = fixedpoint(Ψ, H, opt_alg, env_init)
+# optimize gismos
+function my_retract(x, dx, α)
+    A, Be, Bo, env = deepcopy(x)
+    dA, dBe, dBo = dx
+
+    A += α * dA
+    Be += α * dBe
+    Bo += α * dBo
+
+    # env = leading_boundary(env, peps_Gauge(A, Be, Bo), ctm_alg)
+
+    return (A, Be, Bo, env), dx
+end
+
+function my_scale!(v, α)
+    LinearAlgebra.rmul!.(v, α)
+    return v
+end
+
+function my_add!(vdst, vsrc, α)
+    LinearAlgebra.axpy!.(α, vsrc, vdst)
+    return vdst
+end
+
+function my_inner(x, v1, v2)
+    return real(dot(v1[1], v2[1])) + dot(v1[2], v2[2]) + dot(v1[3], v2[3])
+end
+
+
+
+
+real_inner(_, η₁, η₂) = real(dot(η₁, η₂))
+
+function hook_pullback(@nospecialize(f), args...; alg_rrule=nothing, kwargs...)
+    return f(args...; kwargs...)
+end
+
+# function costfun(Ψ, envs)
+#     E = MPSKit.expectation_value(Ψ, H, envs)
+#     return real(E)
+# end
+function update!(env::CTMRGEnv{C,T}, env´::CTMRGEnv{C,T}) where {C,T}
+    env.corners .= env´.corners
+    env.edges .= env´.edges
+    return env
+end
+reuse_env = true
+
+
+(A, Be, Bo, env), E, ∂E, numfg, convhistory = optimize(
+        (A, Be, Bo, env_init), opt_alg.optimizer; retract = my_retract, inner=my_inner, scale! = my_scale!, add! = my_add!, finalize! = OptimKit._finalize!
+    ) do (A, Be, Bo, envs)
+        E, gs = withgradient(A, Be, Bo) do A, Be, Bo
+            Ψ = peps_Gauge(A, Be, Bo)
+            envs´ = hook_pullback(
+                leading_boundary,
+                envs,
+                Ψ,
+                opt_alg.boundary_alg;
+                alg_rrule=opt_alg.gradient_alg,
+            )
+            ignore_derivatives() do
+                opt_alg.reuse_env && update!(envs, envs´)
+            end
+            return costfun(Ψ, envs, H)
+        end
+        gs
+        return E, gs
+    end
+
+# function cfun(x)
+#     (As, Bes, Bos, envs) = x
+
+#     function costfun(A, Be, Bo)
+#         Ψ .= peps_Gauge(A, Be, Bo)
+#         envs = leading_boundary(x[4], Ψ, ctm_alg)
+#         E = MPSKit.expectation_value(Ψ, H, envs)
+#         ignore_derivatives() do
+#             reuse_env && update!(envs, envs)
+#         end
+#         return real(E)
+#     end
+    
+#     E, g = withgradient(costfun, As, Bes, Bos)
+#     ∂E∂A = g[1]
+
+#     # @assert !isnan(norm(∂E∂v))
+#     return E, ∂E∂A
+# end
+
 
 
 file = jldopen("Initial_Psi.jld2", "w")
 file["Ψ"] = Ψ
 close(file)
+
+Ψ = peps_Gauge(A, Be, Bo)
+BW = Ψ[1, 2]
+trees = collect(fusiontrees(BW))
+te = only(filter(((s, f),) -> (f.uncoupled[2] == Irrep[ℤ₂](0)), trees))
+
+map(trees) do (s, f)
+    f.uncoupled[2] == Irrep[ℤ₂](0)
+end
