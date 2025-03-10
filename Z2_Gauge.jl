@@ -17,7 +17,7 @@ using PEPSKit: PEPSTensor, CTMRGEnv, NORTH, SOUTH, WEST, EAST, NORTHWEST, NORTHE
 
 # initialize states
 
-
+#Define Hamiltonian
 function Fradkin_Shenker(lattice::InfiniteSquare; kwargs...)
     return Fradkin_Shenker(ComplexF64, Z2Irrep, lattice; kwargs...)    
 end
@@ -109,6 +109,8 @@ function triplebond(lattice::InfiniteSquare)
     end
     return neighbors
 end
+
+#utilities to define PEPS
 
 function gauge_inv_peps(pdim::Int, vdim::Int, ::Type{Z2Irrep})
     p = Int(pdim / 2)
@@ -203,7 +205,7 @@ p = P/2
 v = Int(D / 2)
 symm = Z2Irrep
 
-H = Fradkin_Shenker(InfiniteSquare(2,2); Jx=1, Jz=0, hx=1, hz=0, pdim=2, vdim=4)
+H = Fradkin_Shenker(InfiniteSquare(2,2); Jx=1, Jz=1, hx=1, hz=0, pdim=2, vdim=4)
 
 PA = Z2Space(0 => p, 1 => p)
 V = Z2Space(0 => v, 1 => v)
@@ -213,13 +215,14 @@ Bo = diag(rand(Float64,v,v))
 
 Ψ = peps_Gauge(A, Be, Bo)
 ctm_alg = CTMRG(verbosity = 4)
+env_init = leading_boundary(CTMRGEnv(Ψ, Z2Space(0 => χ)), Ψ, ctm_alg);
+
 opt_alg = PEPSOptimize(;
     boundary_alg=ctm_alg,
     optimizer=LBFGS(4; gradtol=1e-3, verbosity=2),
     gradient_alg=LinSolver(; iterscheme=:diffgauge),
 )
 
-env_init = leading_boundary(CTMRGEnv(Ψ, Z2Space(0 => χ)), Ψ, ctm_alg);
 
 # optimize gismos
 function my_retract(x, dx, α)
@@ -313,7 +316,7 @@ reuse_env = true
 new_Ψ = peps_Gauge(A, Be, Bo)
 
 
-file = jldopen("final_Psi.jld2", "w")
+file = jldopen("final_Psi_hx=1.jld2", "w")
 file["Ψ"] = new_Ψ
 file["env"] = env
 close(file)
