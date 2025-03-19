@@ -215,11 +215,12 @@ Bo = diag(rand(Float64,v,v))
 
 Ψ = peps_Gauge(A, Be, Bo)
 ctm_alg = SequentialCTMRG(verbosity = 4)
-env_init = leading_boundary(CTMRGEnv(Ψ, Z2Space(0 => χ)), Ψ, ctm_alg);
+env_init,  = leading_boundary(CTMRGEnv(Ψ, Z2Space(0 => χ)), Ψ, ctm_alg);
+
 
 opt_alg = PEPSOptimize(;
     boundary_alg=ctm_alg,
-    optimizer=LBFGS(4; gradtol=1e-3, verbosity=2),
+    optimizer_alg=LBFGS(4; gradtol=1e-3, verbosity=2),
     gradient_alg=LinSolver(; iterscheme=:diffgauge),
 )
 
@@ -261,10 +262,10 @@ function hook_pullback(@nospecialize(f), args...; alg_rrule=nothing, kwargs...)
     return f(args...; kwargs...)
 end
 
-# function costfun(Ψ, envs)
-#     E = MPSKit.expectation_value(Ψ, H, envs)
-#     return real(E)
-# end
+function costfun(Ψ, envs, H)
+    E = MPSKit.expectation_value(Ψ, H, envs)
+    return real(E)
+end
 function update!(env::CTMRGEnv{C,T}, env´::CTMRGEnv{C,T}) where {C,T}
     env.corners .= env´.corners
     env.edges .= env´.edges
@@ -274,11 +275,11 @@ reuse_env = true
 
 
 (A, Be, Bo, env), E, ∂E, numfg, convhistory = optimize(
-        (A, Be, Bo, env_init), opt_alg.optimizer; retract = my_retract, inner=my_inner, scale! = my_scale!, add! = my_add!, finalize! = OptimKit._finalize!
+        (A, Be, Bo, env_init), opt_alg.optimizer_alg; retract = my_retract, inner=my_inner, scale! = my_scale!, add! = my_add!, finalize! = OptimKit._finalize!
     ) do (A, Be, Bo, envs)
         E, gs = withgradient(A, Be, Bo) do A, Be, Bo
             Ψ = peps_Gauge(A, Be, Bo)
-            envs´ = hook_pullback(
+            envs´,  = hook_pullback(
                 leading_boundary,
                 envs,
                 Ψ,
