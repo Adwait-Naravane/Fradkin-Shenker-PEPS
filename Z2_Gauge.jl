@@ -214,7 +214,7 @@ Be = diag(rand(Float64,v,v))
 Bo = diag(rand(Float64,v,v))
 
 Ψ = peps_Gauge(A, Be, Bo)
-ctm_alg = CTMRG(verbosity = 4)
+ctm_alg = SequentialCTMRG(verbosity = 4)
 env_init = leading_boundary(CTMRGEnv(Ψ, Z2Space(0 => χ)), Ψ, ctm_alg);
 
 opt_alg = PEPSOptimize(;
