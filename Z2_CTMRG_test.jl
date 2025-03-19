@@ -205,7 +205,11 @@ env_init_peps.corners[4, 1, 1] = env.corners[4]
 n = norm(Ψ, env_init_peps)
 n2 = network_value(Z, env)
 
-env_peps, = leading_boundary(env_init_peps, Ψ, ctm_alg );
+
+
+# ctm_alg = SimultaneousCTMRG(; maxiter=150, verbosity=3, projector_alg = :svd)
+
+# env_peps, = leading_boundary(env_init_peps, Ψ, ctm_alg);
 
 PEPSKit.@autoopt @tensor env_init_peps.edges[4, 1, 2][χ1 D1 D2; χ2] * env_init_peps.corners[1, 2, 2][χ2; χ3] *
                          env_init_peps.edges[1, 2, 1][χ3 D3 D4; χ4] * env_init_peps.corners[2, 2, 2][χ4; χ5] * env_init_peps.edges[2, 1, 2][χ5 D5 D6; χ6] *
