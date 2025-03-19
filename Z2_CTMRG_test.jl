@@ -12,6 +12,7 @@ using Zygote
 using ChainRulesCore
 using Dates
 using JLD2
+
 using PEPSKit: PEPSTensor, CTMRGEnv, NORTH, SOUTH, WEST, EAST, NORTHWEST, NORTHEAST, SOUTHEAST, SOUTHWEST, _prev, _next, GradMode
 
 #utilities to define PEPS
@@ -145,10 +146,10 @@ function partition_function_peps(Ψ::InfinitePEPS)
 end
 
 Z = partition_function_peps(Ψ)
-ctm_alg = SequentialCTMRG(; maxiter=150, verbosity=2)
+ctm_alg = SimultaneousCTMRG(; maxiter=150, verbosity=3)
 χenv = 24
 env0 = CTMRGEnv(Z, Z2Space(0 => χenv))
-env = leading_boundary(env0, Z, ctm_alg);
+env, = leading_boundary(env0, Z, ctm_alg);
 
 P1, P2, U1, U2, S = gauge_isometries(Ψ[1, 2])
 S_inv = inv(sqrt(S))
@@ -201,7 +202,10 @@ env_init_peps.corners[3, 1, 1] = env.corners[3]
 env_init_peps.corners[2, 1, 1] = env.corners[2]
 env_init_peps.corners[4, 1, 1] = env.corners[4]
 
-#env_peps = leading_boundary(env_init_peps, Ψ, ctm_alg);
+n = norm(Ψ, env_init_peps)
+n2 = network_value(Z, env)
+
+env_peps, = leading_boundary(env_init_peps, Ψ, ctm_alg );
 
 PEPSKit.@autoopt @tensor env_init_peps.edges[4, 1, 2][χ1 D1 D2; χ2] * env_init_peps.corners[1, 2, 2][χ2; χ3] *
                          env_init_peps.edges[1, 2, 1][χ3 D3 D4; χ4] * env_init_peps.corners[2, 2, 2][χ4; χ5] * env_init_peps.edges[2, 1, 2][χ5 D5 D6; χ6] *
@@ -210,6 +214,12 @@ PEPSKit.@autoopt @tensor env_init_peps.edges[4, 1, 2][χ1 D1 D2; χ2] * env_init
 
 PEPSKit.@autoopt @tensor env.edges[4][χ1 D1; χ2] * env.corners[1][χ2; χ3] * env.edges[1][χ3 D2; χ4] * env.corners[2][χ4; χ5] * env.edges[2][χ5 D3; χ6] *
                          env.corners[3][χ6; χ7] * env.edges[3][χ7 D4; χ8] * env.corners[4][χ8; χ1] * Z[1, 1][D1 D4; D2 D3]
+
+PEPSKit.@autoopt @tensor env_peps.edges[4, 1, 2][χ1 D1 D2; χ2] * env_peps.corners[1, 2, 2][χ2; χ3] *
+                         env_peps.edges[1, 2, 1][χ3 D3 D4; χ4] * env_peps.corners[2, 2, 2][χ4; χ5] * env_peps.edges[2, 1, 2][χ5 D5 D6; χ6] *
+                         env_peps.corners[3, 2, 2][χ6; χ7] * env_peps.edges[3, 2, 1][χ7 D7 D8; χ8] * env_peps.corners[4, 2, 2][χ8; χ1] *
+                         Ψ[1, 1][1; D3 D5 D7 D1] * conj(Ψ[1, 1][1; D4 D6 D8 D2])
+
 
 # function env_init_peps_pullback(denv)
 #     dP1 = zeros(ComplexF64, size(P1))
