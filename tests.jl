@@ -52,3 +52,12 @@ opt_alg = PEPSOptimize(;
         gs
         return E, gs
     end
+
+
+new_Ψ = peps_Gauge(A, Be, Bo)
+
+
+file = jldopen("Saved_content/final_Psi_hx=1_hz=0_χ=$(χ)_D=$(D).jld2", "w")
+file["Ψ"] = new_Ψ
+file["env"] = env
+close(file)

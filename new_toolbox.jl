@@ -92,11 +92,21 @@ function partition_function_peps(Ψ::InfinitePEPS)
     squashed_A = pancakemaker(Ψ[1, 1])
     
     
-    Z_buffer = InfinitePartitionFunction(TensorMap(zeros, ComplexF64, space(P2, 1) ⊗ space(P2, 1) ← space(P1, 3)' ⊗ space(P1, 3)'))
-    A_bar = Zygote.Buffer(Z_buffer.A)
+    # Z_buffer = InfinitePartitionFunction(TensorMap(zeros, ComplexF64, space(P2, 1) ⊗ space(P2, 1) ← space(P1, 3)' ⊗ space(P1, 3)'))
+    # A_bar = Zygote.Buffer(Z_buffer.A)
     @tensor A_bar[-1 -2; -3 -4] := squashed_A[1 2 3 4; 5 6 7 8] * P2[-1; 1 2] * P2[-2; 3 4] * P1[5 6; -3] * P1[7 8; -4]
     
-    return InfinitePartitionFunction(copy(A_bar))
+    return InfinitePartitionFunction(A_bar)
+end
+
+
+function ChainRulesCore.rrule(::typeof(InfinitePartitionFunction), A::Matrix{<:PEPSKit.PartitionFunctionTensor})
+    Z = InfinitePartitionFunction(A)
+    
+    function InfinitePartitionFunction_pullback(dZ)
+        return NoTangent(), unitcell(dZ)
+    end
+    return Z, InfinitePartitionFunction_pullback
 end
 
 function get_new_environment_Z(env::CTMRGEnv, Ψ::InfinitePEPS)
