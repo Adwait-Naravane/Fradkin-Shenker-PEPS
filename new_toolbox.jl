@@ -90,36 +90,41 @@ end
 function partition_function_peps(Ψ::InfinitePEPS)
     P1, P2, _, _, _ = gauge_isometries(Ψ[1, 2])
     squashed_A = pancakemaker(Ψ[1, 1])
-
+    
+    
+    Z_buffer = InfinitePartitionFunction(TensorMap(zeros, ComplexF64, space(P2, 1) ⊗ space(P2, 1) ← space(P1, 3)' ⊗ space(P1, 3)'))
+    A_bar = Zygote.Buffer(Z_buffer.A)
     @tensor A_bar[-1 -2; -3 -4] := squashed_A[1 2 3 4; 5 6 7 8] * P2[-1; 1 2] * P2[-2; 3 4] * P1[5 6; -3] * P1[7 8; -4]
-    return InfinitePartitionFunction(A_bar)
+    
+    return InfinitePartitionFunction(copy(A_bar))
 end
 
-function get_new_environment_Z(env::CTMRGEnv, Ψ::InfinitePEPS, ctmalg::PEPSKit.CTMRGAlgorithm)
+function get_new_environment_Z(env::CTMRGEnv, Ψ::InfinitePEPS)
     P1, P2, U1, U2, S = gauge_isometries(Ψ[1, 2])
     S_inv = inv(sqrt(S))
     Z = partition_function_peps(Ψ)
     χenv = space(env.edges[1], 1)
-    env_Z = CTMRGEnv(Z, χenv)
+    env_Z_buffer = CTMRGEnv(Z, χenv)
+    corners = Zygote.Buffer(env_Z_buffer.corners)
+    edges = Zygote.Buffer(env_Z_buffer.edges)
+    @tensor edges[4][-1 -2; -3] := env.edges[4, 1, 2][-1 1 2; -3] * adjoint(U2)[1 2; 3] * S_inv[3; -2]
+    @tensor edges[1][-1 -2; -3] := env.edges[1, 2, 1][-1 1 2; -3] * adjoint(U1)[3; 1 2] * S_inv[-2; 3]
+    @tensor edges[2][-1 -2; -3] := env.edges[2, 1, 2][-1 1 2; -3] * adjoint(U1)[3; 1 2] * S_inv[-2; 3]
+    @tensor edges[3][-1 -2; -3] := env.edges[3, 2, 1][-1 1 2; -3] * adjoint(U2)[1 2; 3] * S_inv[3; -2]
 
-    @tensor env_Z.edges[4][-1 -2; -3] := env.edges[4,1,2][-1 1 2; -3] * adjoint(U2)[1 2; 3] * S_inv[3; -2] 
-    @tensor env_Z.edges[1][-1 -2; -3] := env.edges[1,2,1][-1 1 2; -3] * adjoint(U1)[3; 1 2] * S_inv[-2; 3]
-    @tensor env_Z.edges[2][-1 -2; -3] := env.edges[2,1,2][-1 1 2; -3] * adjoint(U1)[3; 1 2] * S_inv[-2; 3]
-    @tensor env_Z.edges[3][-1 -2; -3] := env.edges[3,2,1][-1 1 2; -3] * adjoint(U2)[1 2; 3] * S_inv[3; -2]
-    
-    env_Z.corners[1] = env.corners[1,2,2]
-    env_Z.corners[3] = env.corners[3,2,2]
-    env_Z.corners[2] = env.corners[2,2,2]
-    env_Z.corners[4] = env.corners[4,2,2]
+    corners[1] = env.corners[1, 2, 2]
+    corners[3] = env.corners[3, 2, 2]
+    corners[2] = env.corners[2, 2, 2]
+    corners[4] = env.corners[4, 2, 2]
 
-    return env_Z
+    return CTMRGEnv(copy(corners), copy(edges))
 
 end
 
-function environment_Z(env0::CTMRGEnv, Z::InfinitePartitionFunction, ctmalg::PEPSKit.CTMRGAlgorithm)
-    env, = leading_boundary(env0, Z, ctmalg)
-    return env
-end
+# function environment_Z(env0::CTMRGEnv, Z::InfinitePartitionFunction, ctmalg::PEPSKit.CTMRGAlgorithm)
+#     env, = leading_boundary(env0, Z, ctmalg)
+#     return env
+# end
 
 function retrieve_old_environment(env::CTMRGEnv, Ψ::InfinitePEPS)
 
@@ -131,57 +136,85 @@ function retrieve_old_environment(env::CTMRGEnv, Ψ::InfinitePEPS)
     identity_edge_type1 = isometry(V ⊗ trivial ⊗ trivial', V)
     identity_edge_type2 = isometry(V ⊗ trivial' ⊗ trivial, V)
 
-    env_init_peps = CTMRGEnv(Ψ, χenv)
+    env_init_peps_buffer = CTMRGEnv(Ψ, χenv)
+    edges = Zygote.Buffer(env_init_peps_buffer.edges)
+    corners = Zygote.Buffer(env_init_peps_buffer.corners)
 
-    @tensor env_init_peps.edges[4, 1, 2][-1 -2 -3; -4] := env.edges[4][-1 1; -4] * P2[1; -2 -3]
-    @tensor env_init_peps.edges[1, 2, 1][-1 -2 -3; -4] := env.edges[1][-1 1; -4] * P1[-2 -3; 1]
-    @tensor env_init_peps.edges[2, 1, 2][-1 -2 -3; -4] := env.edges[2][-1 1; -4] * P1[-2 -3; 1]
-    @tensor env_init_peps.edges[3, 2, 1][-1 -2 -3; -4] := env.edges[3][-1 1; -4] * P2[1; -2 -3]
+    @tensor edges[4, 1, 2][-1 -2 -3; -4] := env.edges[4][-1 1; -4] * P2[1; -2 -3]
+    @tensor edges[1, 2, 1][-1 -2 -3; -4] := env.edges[1][-1 1; -4] * P1[-2 -3; 1]
+    @tensor edges[2, 1, 2][-1 -2 -3; -4] := env.edges[2][-1 1; -4] * P1[-2 -3; 1]
+    @tensor edges[3, 2, 1][-1 -2 -3; -4] := env.edges[3][-1 1; -4] * P2[1; -2 -3]
 
-    @tensor env_init_peps.edges[4, 1, 1][-1 -2 -3; -4] := env.edges[4][-1 1; -4] * S_inv[1; 2] * adjoint(U1)[2; -2 -3]
-    @tensor env_init_peps.edges[2, 1, 1][-1 -2 -3; -4] := env.edges[2][-1 1; -4] * S_inv[2; 1] * adjoint(U2)[-2 -3; 2]
-    env_init_peps.edges[1, 2, 2] = identity_edge_type1
-    env_init_peps.edges[3, 2, 2] = identity_edge_type2
+    @tensor edges[4, 1, 1][-1 -2 -3; -4] := env.edges[4][-1 1; -4] * S_inv[1; 2] * adjoint(U1)[2; -2 -3]
+    @tensor edges[2, 1, 1][-1 -2 -3; -4] := env.edges[2][-1 1; -4] * S_inv[2; 1] * adjoint(U2)[-2 -3; 2]
+    edges[1, 2, 2] = identity_edge_type1
+    edges[3, 2, 2] = identity_edge_type2
 
 
-    @tensor env_init_peps.edges[1, 1, 1][-1 -2 -3; -4] := env.edges[1][-1 1; -4] * S_inv[2; 1] * adjoint(U2)[-2 -3; 2]
-    @tensor env_init_peps.edges[3, 1, 1][-1 -2 -3; -4] := env.edges[3][-1 1; -4] * S_inv[1; 2] * adjoint(U1)[2; -2 -3]
-    env_init_peps.edges[2, 2, 2] = identity_edge_type1
-    env_init_peps.edges[4, 2, 2] = identity_edge_type2
+    @tensor edges[1, 1, 1][-1 -2 -3; -4] := env.edges[1][-1 1; -4] * S_inv[2; 1] * adjoint(U2)[-2 -3; 2]
+    @tensor edges[3, 1, 1][-1 -2 -3; -4] := env.edges[3][-1 1; -4] * S_inv[1; 2] * adjoint(U1)[2; -2 -3]
+    edges[2, 2, 2] = identity_edge_type1
+    edges[4, 2, 2] = identity_edge_type2
 
-    env_init_peps.edges[1, 1, 2] = identity_edge_type1
-    env_init_peps.edges[3, 1, 2] = identity_edge_type2
-    env_init_peps.edges[2, 2, 1] = identity_edge_type1
-    env_init_peps.edges[4, 2, 1] = identity_edge_type2
+    edges[1, 1, 2] = identity_edge_type1
+    edges[3, 1, 2] = identity_edge_type2
+    edges[2, 2, 1] = identity_edge_type1
+    edges[4, 2, 1] = identity_edge_type2
 
-    env_init_peps.corners[1, 2, 2] = env.corners[1]
-    env_init_peps.corners[3, 2, 2] = env.corners[3]
-    env_init_peps.corners[2, 2, 2] = env.corners[2]
-    env_init_peps.corners[4, 2, 2] = env.corners[4]
+    corners[1, 2, 2] = env.corners[1]
+    corners[3, 2, 2] = env.corners[3]
+    corners[2, 2, 2] = env.corners[2]
+    corners[4, 2, 2] = env.corners[4]
 
-    env_init_peps.corners[1, 2, 1] = env.corners[1]
-    env_init_peps.corners[3, 2, 1] = env.corners[3]
-    env_init_peps.corners[2, 2, 1] = env.corners[2]
-    env_init_peps.corners[4, 2, 1] = env.corners[4]
+    corners[1, 2, 1] = env.corners[1]
+    corners[3, 2, 1] = env.corners[3]
+    corners[2, 2, 1] = env.corners[2]
+    corners[4, 2, 1] = env.corners[4]
 
-    env_init_peps.corners[1, 1, 2] = env.corners[1]
-    env_init_peps.corners[3, 1, 2] = env.corners[3]
-    env_init_peps.corners[2, 1, 2] = env.corners[2]
-    env_init_peps.corners[4, 1, 2] = env.corners[4]
+    corners[1, 1, 2] = env.corners[1]
+    corners[3, 1, 2] = env.corners[3]
+    corners[2, 1, 2] = env.corners[2]
+    corners[4, 1, 2] = env.corners[4]
 
-    env_init_peps.corners[1, 1, 1] = env.corners[1]
-    env_init_peps.corners[3, 1, 1] = env.corners[3]
-    env_init_peps.corners[2, 1, 1] = env.corners[2]
-    env_init_peps.corners[4, 1, 1] = env.corners[4]
+    corners[1, 1, 1] = env.corners[1]
+    corners[3, 1, 1] = env.corners[3]
+    corners[2, 1, 1] = env.corners[2]
+    corners[4, 1, 1] = env.corners[4]
 
-    return env_init_peps
+    return CTMRGEnv(copy(corners), copy(edges))
 end
+
+
+# function ChainRulesCore.rrule(::typeof(retrieve_old_environment), env::CTMRGEnv, Ψ::InfinitePEPS)
+#     env_final = retrieve_old_environment(env, Ψ)
+#     Z = partition_function_peps(Ψ)
+#     P1, P2, U1, U2, S = gauge_isometries(Ψ[1, 2])
+#     S_inv = inv(sqrt(S))
+#     χenv = space(env.edges[1], 1)
+#     function retrieve_old_environment_pullback(denv_final)
+#         denv = CTMRGEnv(Z, χenv)
+
+#         @tensor denv.edges[4][-1 -2; -3] := denv_final.edges[4, 1, 2][-1 1 2; -3] * adjoint(U2)[1 2; 3] * S_inv[3; -2]
+#         @tensor denv.edges[1][-1 -2; -3] := denv_final.edges[1, 2, 1][-1 1 2; -3] * adjoint(U1)[3; 1 2] * S_inv[-2; 3]
+#         @tensor denv.edges[2][-1 -2; -3] := denv_final.edges[2, 1, 2][-1 1 2; -3] * adjoint(U1)[3; 1 2] * S_inv[-2; 3]
+#         @tensor denv.edges[3][-1 -2; -3] := denv_final.edges[3, 2, 1][-1 1 2; -3] * adjoint(U2)[1 2; 3] * S_inv[3; -2]
+
+#         denv.corners[1] = denv_final.corners[1, 2, 2]
+#         denv.corners[3] = denv_final.corners[3, 2, 2]
+#         denv.corners[2] = denv_final.corners[2, 2, 2]
+#         denv.corners[4] = denv_final.corners[4, 2, 2]
+
+
+#         return NoTangent(), denv
+#     end
+#     return env_final, retrieve_old_environment_pullback
+# end
 
 function new_leading_boundary(env::CTMRGEnv, Ψ::InfinitePEPS, ctmalg::PEPSKit.CTMRGAlgorithm)
     Z = partition_function_peps(Ψ)
-    env0 = get_new_environment_Z(env, Ψ, ctmalg)
-    env_Z = environment_Z(env0, Z, ctmalg)
-    env_final =  retrieve_old_environment(env_Z, Ψ)
+    env0 = get_new_environment_Z(env, Ψ)
+    env_Z, = leading_boundary(env0, Z, ctmalg)
+    env_final = retrieve_old_environment(env_Z, Ψ)
     return env_final
 end
 
@@ -218,7 +251,7 @@ end
 
 #Define Hamiltonian
 function Fradkin_Shenker(lattice::InfiniteSquare; kwargs...)
-    return Fradkin_Shenker(ComplexF64, Z2Irrep, lattice; kwargs...)    
+    return Fradkin_Shenker(ComplexF64, Z2Irrep, lattice; kwargs...)
 end
 
 function Fradkin_Shenker(T::Type{<:Number},
@@ -227,7 +260,7 @@ function Fradkin_Shenker(T::Type{<:Number},
     p = Int(pdim / 2)
     v = Int(vdim / 2)
 
-    PB = Z2Space(0 => 2*p)
+    PB = Z2Space(0 => 2 * p)
     PA = Z2Space(0 => p, 1 => p)
     PT = Z2Space(0 => p)
     V = Z2Space(0 => v, 1 => v)
@@ -255,7 +288,7 @@ function Fradkin_Shenker(T::Type{<:Number},
 
     @tensor B[-1 -2 -3; -4 -5 -6] := XX[-1 -3; -4 -6] * GX[-2; -5]
 
-    
+
 
     spaces = Matrix{Z2Space}(undef, lattice.Nrows, lattice.Ncols)
     lattice = InfiniteSquare(2, 2)
@@ -263,11 +296,11 @@ function Fradkin_Shenker(T::Type{<:Number},
         for j = 1:lattice.Ncols
             if isodd(i) && isodd(j)
                 spaces[i, j] = PA
-         
+
             elseif iseven(i) && iseven(j)
                 spaces[i, j] = PT
-        
-            else    
+
+            else
                 spaces[i, j] = PB
             end
         end
@@ -289,21 +322,21 @@ function Fradkin_Shenker(T::Type{<:Number},
 end
 
 function plaq(lattice::InfiniteSquare)
-    neighbors = Tuple{CartesianIndex,CartesianIndex, CartesianIndex, CartesianIndex}[]
+    neighbors = Tuple{CartesianIndex,CartesianIndex,CartesianIndex,CartesianIndex}[]
     for idx in PEPSKit.vertices(lattice)
         if isodd(idx[1]) && isodd(idx[2])
-            push!(neighbors, (idx + CartesianIndex(0,1), idx + CartesianIndex(1,2), idx + CartesianIndex(2,1), idx + CartesianIndex(1,0)))
+            push!(neighbors, (idx + CartesianIndex(0, 1), idx + CartesianIndex(1, 2), idx + CartesianIndex(2, 1), idx + CartesianIndex(1, 0)))
         end
     end
     return neighbors
 end
 
 function triplebond(lattice::InfiniteSquare)
-    neighbors = Tuple{CartesianIndex, CartesianIndex, CartesianIndex}[]
+    neighbors = Tuple{CartesianIndex,CartesianIndex,CartesianIndex}[]
     for idx in PEPSKit.vertices(lattice)
         if isodd(idx[1]) && isodd(idx[2])
-            push!(neighbors, (idx, idx + CartesianIndex(0,1), idx + CartesianIndex(0,2)))
-            push!(neighbors, (idx, idx + CartesianIndex(1,0), idx + CartesianIndex(2,0)))
+            push!(neighbors, (idx, idx + CartesianIndex(0, 1), idx + CartesianIndex(0, 2)))
+            push!(neighbors, (idx, idx + CartesianIndex(1, 0), idx + CartesianIndex(2, 0)))
         end
     end
     return neighbors
