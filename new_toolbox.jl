@@ -95,8 +95,28 @@ function partition_function_peps(Ψ::InfinitePEPS)
     return InfinitePartitionFunction(A_bar)
 end
 
-function environment_Z(Z::InfinitePartitionFunction, ctmalg::PEPSKit.CTMRGAlgorithm, χenv::Int)
-    env0 = CTMRGEnv(Z, Z2Space(0 => χenv))
+function get_new_environment_Z(env::CTMRGEnv, Ψ::InfinitePEPS, ctmalg::PEPSKit.CTMRGAlgorithm)
+    P1, P2, U1, U2, S = gauge_isometries(Ψ[1, 2])
+    S_inv = inv(sqrt(S))
+    Z = partition_function_peps(Ψ)
+    χenv = space(env.edges[1], 1)
+    env_Z = CTMRGEnv(Z, χenv)
+
+    @tensor env_Z.edges[4][-1 -2; -3] := env.edges[4,1,2][-1 1 2; -3] * adjoint(U2)[1 2; 3] * S_inv[3; -2] 
+    @tensor env_Z.edges[1][-1 -2; -3] := env.edges[1,2,1][-1 1 2; -3] * adjoint(U1)[3; 1 2] * S_inv[-2; 3]
+    @tensor env_Z.edges[2][-1 -2; -3] := env.edges[2,1,2][-1 1 2; -3] * adjoint(U1)[3; 1 2] * S_inv[-2; 3]
+    @tensor env_Z.edges[3][-1 -2; -3] := env.edges[3,2,1][-1 1 2; -3] * adjoint(U2)[1 2; 3] * S_inv[3; -2]
+    
+    env_Z.corners[1] = env.corners[1,2,2]
+    env_Z.corners[3] = env.corners[3,2,2]
+    env_Z.corners[2] = env.corners[2,2,2]
+    env_Z.corners[4] = env.corners[4,2,2]
+
+    return env_Z
+
+end
+
+function environment_Z(env0::CTMRGEnv, Z::InfinitePartitionFunction, ctmalg::PEPSKit.CTMRGAlgorithm)
     env, = leading_boundary(env0, Z, ctmalg)
     return env
 end
@@ -105,13 +125,13 @@ function retrieve_old_environment(env::CTMRGEnv, Ψ::InfinitePEPS)
 
     P1, P2, U1, U2, S = gauge_isometries(Ψ[1, 2])
     S_inv = inv(sqrt(S))
-
-    V = Z2Space(0 => χenv)
+    χenv = space(env.edges[1], 1)
+    V = χenv
     trivial = Z2Space(0 => 1)
     identity_edge_type1 = isometry(V ⊗ trivial ⊗ trivial', V)
     identity_edge_type2 = isometry(V ⊗ trivial' ⊗ trivial, V)
 
-    env_init_peps = CTMRGEnv(Ψ, Z2Space(0 => χenv))
+    env_init_peps = CTMRGEnv(Ψ, χenv)
 
     @tensor env_init_peps.edges[4, 1, 2][-1 -2 -3; -4] := env.edges[4][-1 1; -4] * P2[1; -2 -3]
     @tensor env_init_peps.edges[1, 2, 1][-1 -2 -3; -4] := env.edges[1][-1 1; -4] * P1[-2 -3; 1]
@@ -157,41 +177,43 @@ function retrieve_old_environment(env::CTMRGEnv, Ψ::InfinitePEPS)
     return env_init_peps
 end
 
-function new_leading_boundary(Ψ::InfinitePEPS, ctmalg::PEPSKit.CTMRGAlgorithm, χenv::Int)
+function new_leading_boundary(env::CTMRGEnv, Ψ::InfinitePEPS, ctmalg::PEPSKit.CTMRGAlgorithm)
     Z = partition_function_peps(Ψ)
-    env = environment_Z(Z, ctmalg, χenv)
-    return retrieve_old_environment(env, Ψ)
+    env0 = get_new_environment_Z(env, Ψ, ctmalg)
+    env_Z = environment_Z(env0, Z, ctmalg)
+    env_final =  retrieve_old_environment(env_Z, Ψ)
+    return env_final
 end
 
-function _rrule(
-    gradmode::GradMode{:diffgauge},
-    config::RuleConfig,
-    ::typeof(new_leading_boundary),
-    state,
-    alg::CTMRGAlgorithm,
-)
-    env = new_leading_boundary(state, alg, χ_env)
-    alg_fixed = @set alg.projector_alg.trscheme = FixedSpaceTruncation() # fix spaces during differentiation
+# function _rrule(
+#     gradmode::GradMode{:diffgauge},
+#     config::RuleConfig,
+#     ::typeof(new_leading_boundary),
+#     state,
+#     alg::CTMRGAlgorithm,
+# )
+#     env = new_leading_boundary(state, alg, χ_env)
+#     alg_fixed = @set alg.projector_alg.trscheme = FixedSpaceTruncation() # fix spaces during differentiation
 
-    function new_leading_boundary_diffgauge_pullback((Δenv′, Δinfo))
-        Δenv = unthunk(Δenv′)
+#     function new_leading_boundary_diffgauge_pullback((Δenv′, Δinfo))
+#         Δenv = unthunk(Δenv′)
 
-        # find partial gradients of gauge_fixed single CTMRG iteration
-        function f(A, x)
-            return gauge_fix(x, ctmrg_iteration(InfiniteSquareNetwork(A), x, alg_fixed)[1])[1]
-        end
-        _, env_vjp = rrule_via_ad(config, f, state, env)
+#         # find partial gradients of gauge_fixed single CTMRG iteration
+#         function f(A, x)
+#             return gauge_fix(x, ctmrg_iteration(InfiniteSquareNetwork(A), x, alg_fixed)[1])[1]
+#         end
+#         _, env_vjp = rrule_via_ad(config, f, state, env)
 
-        # evaluate the geometric sum
-        ∂f∂A(x)::typeof(state) = env_vjp(x)[2]
-        ∂f∂x(x)::typeof(env) = env_vjp(x)[3]
-        ∂F∂env = fpgrad(Δenv, ∂f∂x, ∂f∂A, Δenv, gradmode)
+#         # evaluate the geometric sum
+#         ∂f∂A(x)::typeof(state) = env_vjp(x)[2]
+#         ∂f∂x(x)::typeof(env) = env_vjp(x)[3]
+#         ∂F∂env = fpgrad(Δenv, ∂f∂x, ∂f∂A, Δenv, gradmode)
 
-        return NoTangent(), ZeroTangent(), ∂F∂env, NoTangent()
-    end
+#         return NoTangent(), ZeroTangent(), ∂F∂env, NoTangent()
+#     end
 
-    return (env, info), leading_boundary_diffgauge_pullback
-end
+#     return (env, info), leading_boundary_diffgauge_pullback
+# end
 
 
 #Define Hamiltonian
