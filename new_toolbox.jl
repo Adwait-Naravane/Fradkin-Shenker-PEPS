@@ -100,7 +100,7 @@ function partition_function_peps(Ψ::InfinitePEPS)
 end
 
 
-function ChainRulesCore.rrule(::typeof(InfinitePartitionFunction), A::Matrix{<:PEPSKit.PartitionFunctionTensor})
+function ChainRulesCore.rrule(::Type{<:InfinitePartitionFunction}, A::Matrix{<:PEPSKit.PartitionFunctionTensor})
     Z = InfinitePartitionFunction(A)
     
     function InfinitePartitionFunction_pullback(dZ)
