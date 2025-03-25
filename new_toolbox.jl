@@ -104,7 +104,7 @@ function ChainRulesCore.rrule(::typeof(InfinitePartitionFunction), A::Matrix{<:P
     Z = InfinitePartitionFunction(A)
     
     function InfinitePartitionFunction_pullback(dZ)
-        return NoTangent(), unitcell(dZ)
+        return NoTangent(), PEPSKit.unitcell(dZ)
     end
     return Z, InfinitePartitionFunction_pullback
 end
