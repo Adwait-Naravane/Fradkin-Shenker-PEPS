@@ -280,7 +280,7 @@ function Fradkin_Shenker(T::Type{<:Number},
     GZ = TensorMap(ComplexF64[1.0 0.0; 0.0 -1.0], PB ← PB)
     GX = TensorMap(ComplexF64[0.0 1.0; 1.0 0.0], PB ← PB)
     XX = TensorMap(zeros, ComplexF64, PA ⊗ PA ← PA ⊗ PA)
-    @tensor PLAQ[-1 -2 -3 -4; -5 -6 -7 -8] := GX[-1, -5] * GX[-2, -6] * GX[-3, -7] * GX[-4, -8]
+    @tensor PLAQ[-1 -2 -3 -4; -5 -6 -7 -8] := GX[-1; -5] * GX[-2; -6] * GX[-3; -7] * GX[-4; -8]
 
     for (s, f) in fusiontrees(Z)
         if s.uncoupled[1] == Irrep[ℤ₂](0)
