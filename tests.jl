@@ -1,13 +1,15 @@
 include("new_toolbox.jl")
 BLAS.set_num_threads(20)
-χ = 10 # environment bond dimension
-D = 6 # PEPS bond dimension
+χ = 16 # environment bond dimension
+D = 4 # PEPS bond dimension
+hx = 0.1
+hz = 0
 P = 2 # PEPS physical dimension
 p = P/2
 v = Int(D / 2)
 symm = Z2Irrep
 
-H = Fradkin_Shenker(InfiniteSquare(2,2); Jx=1, Jz=1, hx=0.2, hz=0.1, pdim=2, vdim=4);
+H = Fradkin_Shenker(InfiniteSquare(2,2); Jx=1, Jz=1, hx=hx, hz=hz, pdim=2, vdim=4);
 
 PA = Z2Space(0 => p, 1 => p)
 V = Z2Space(0 => v, 1 => v)
@@ -57,7 +59,7 @@ opt_alg = PEPSOptimize(;
 new_Ψ = peps_Gauge(A, Be, Bo);
 
 
-file = jldopen("Saved_content/final_Psi_hx=0.2_hz=0.1_χ=$(χ)_D=$(D).jld2", "w")
+file = jldopen("Saved_content/final_Psi_hx=$(hx)_hz=$(hz)_χ=$(χ)_D=$(D).jld2", "w")
 file["Ψ"] = new_Ψ
 file["env"] = env
 close(file)
