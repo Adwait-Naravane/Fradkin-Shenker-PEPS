@@ -48,6 +48,69 @@ function peps_Gauge(A::PEPSTensor, Be::Vector{Float64}, Bo::Vector{Float64})
     return InfinitePEPS([A BW; BD T])
 end
 
+function peps_Gauge(A::PEPSTensor, Be::Vector{ComplexF64}, Bo::Vector{ComplexF64})
+    p = 1
+    v = Int(D / 2)
+
+    PB = Z2Space(0 => 2 * p)
+    V = Z2Space(0 => v, 1 => v)
+    II = Z2Space(0 => 1)
+
+    BW = TensorMap(zeros, ComplexF64, PB ← II ⊗ V ⊗ (II)' ⊗ (V)')
+    BD = TensorMap(zeros, ComplexF64, PB ← V ⊗ II ⊗ (V)' ⊗ (II)')
+    T = TensorMap(ones, ComplexF64, II ← II ⊗ II ⊗ (II)' ⊗ (II)')
+
+    for (s, f) in fusiontrees(BW)
+        if f.uncoupled[2] == Irrep[ℤ₂](0)
+            BW[s, f][1, 1, :, 1, :] = diagm(Be)
+        else
+            BW[s, f][2, 1, :, 1, :] = diagm(Bo)
+        end
+    end
+
+    for (s, f) in fusiontrees(BD)
+        if f.uncoupled[1] == Irrep[ℤ₂](0)
+            BD[s, f][1, :, 1, :, 1] = diagm(Be)
+        else
+            BD[s, f][2, :, 1, :, 1] = diagm(Bo)
+        end
+    end
+
+    return InfinitePEPS([A BW; BD T])
+end
+
+
+function peps_Gauge_trivial(A::PEPSTensor)
+    p = 1
+    v = Int(D / 2)
+
+    PB = Z2Space(0 => 2 * p)
+    V = Z2Space(0 => v, 1 => v)
+    II = Z2Space(0 => 1)
+
+    BW = TensorMap(zeros, ComplexF64, PB ← II ⊗ V ⊗ (II)' ⊗ (V)')
+    BD = TensorMap(zeros, ComplexF64, PB ← V ⊗ II ⊗ (V)' ⊗ (II)')
+    T = TensorMap(ones, ComplexF64, II ← II ⊗ II ⊗ (II)' ⊗ (II)')
+
+    for (s, f) in fusiontrees(BW)
+        if f.uncoupled[2] == Irrep[ℤ₂](0)
+            BW[s, f][1, 1, :, 1, :] = Matrix{ComplexF64}(I, v, v)
+        else
+            BW[s, f][2, 1, :, 1, :] = Matrix{ComplexF64}(I, v, v)
+        end
+    end
+
+    for (s, f) in fusiontrees(BD)
+        if f.uncoupled[1] == Irrep[ℤ₂](0)
+            BD[s, f][1, :, 1, :, 1] = Matrix{ComplexF64}(I, v, v)
+        else
+            BD[s, f][2, :, 1, :, 1] = Matrix{ComplexF64}(I, v, v)
+        end
+    end
+
+    return InfinitePEPS([A BW; BD T])
+end
+
 function ChainRulesCore.rrule(::typeof(peps_Gauge), A::PEPSTensor, Be::Vector{Float64}, Bo::Vector{Float64})
     Ψ = peps_Gauge(A, Be, Bo)
 
@@ -66,6 +129,33 @@ function ChainRulesCore.rrule(::typeof(peps_Gauge), A::PEPSTensor, Be::Vector{Fl
     return Ψ, peps_Gauge_pullback
 end
 
+function ChainRulesCore.rrule(::typeof(peps_Gauge), A::PEPSTensor, Be::Vector{ComplexF64}, Bo::Vector{ComplexF64})
+    Ψ = peps_Gauge(A, Be, Bo)
+
+    function peps_Gauge_pullback(dΨ)
+        dA = dΨ[1, 1]
+        dBW = dΨ[1, 2]
+
+        trees = collect(fusiontrees(dBW))
+        te = only(filter(((s, f),) -> f.uncoupled[2] == Irrep[ℤ₂](0), trees))
+        to = only(filter(((s, f),) -> f.uncoupled[2] == Irrep[ℤ₂](1), trees))
+        dBe = diag(dBW[te[1], te[2]][1, 1, :, 1, :])
+        dBo = diag(dBW[to[1], to[2]][2, 1, :, 1, :])
+
+        return NoTangent(), dA, real(dBe), real(dBo)
+    end
+    return Ψ, peps_Gauge_pullback
+end
+
+function ChainRulesCore.rrule(::typeof(peps_Gauge_trivial), A::PEPSTensor)
+    Ψ = peps_Gauge_trivial(A)
+
+    function peps_Gauge_trivial_pullback(dΨ)
+        dA = dΨ[1, 1]
+        return NoTangent(), dA
+    end
+    return Ψ, peps_Gauge_trivial_pullback
+end
 
 #Utility functions for CTMRG
 function pancakemaker(A::TensorMap)
@@ -90,19 +180,19 @@ end
 function partition_function_peps(Ψ::InfinitePEPS)
     P1, P2, _, _, _ = gauge_isometries(Ψ[1, 2])
     squashed_A = pancakemaker(Ψ[1, 1])
-    
-    
+
+
     # Z_buffer = InfinitePartitionFunction(TensorMap(zeros, ComplexF64, space(P2, 1) ⊗ space(P2, 1) ← space(P1, 3)' ⊗ space(P1, 3)'))
     # A_bar = Zygote.Buffer(Z_buffer.A)
     @tensor A_bar[-1 -2; -3 -4] := squashed_A[1 2 3 4; 5 6 7 8] * P2[-1; 1 2] * P2[-2; 3 4] * P1[5 6; -3] * P1[7 8; -4]
-    
+
     return InfinitePartitionFunction(A_bar)
 end
 
 
 function ChainRulesCore.rrule(::Type{<:InfinitePartitionFunction}, A::Matrix{<:PEPSKit.PartitionFunctionTensor})
     Z = InfinitePartitionFunction(A)
-    
+
     function InfinitePartitionFunction_pullback(dZ)
         return NoTangent(), PEPSKit.unitcell(dZ)
     end
@@ -366,6 +456,18 @@ function my_retract(x, dx, α)
     return (A, Be, Bo, env), dx
 end
 
+function my_retract_trivial(x, dx, α)
+    A, env = deepcopy(x)
+    dA, = dx
+
+    A += α * dA
+
+
+    # env = leading_boundary(env, peps_Gauge(A, Be, Bo), ctm_alg)
+
+    return (A, env), dx
+end
+
 function my_scale!(v, α)
     LinearAlgebra.rmul!.(v, α)
     return v
@@ -377,9 +479,12 @@ function my_add!(vdst, vsrc, α)
 end
 
 function my_inner(x, v1, v2)
-    return real(dot(v1[1], v2[1])) + dot(v1[2], v2[2]) + dot(v1[3], v2[3])
+    return real(dot(v1[1], v2[1])) + real(dot(v1[2], v2[2])) + real(dot(v1[3], v2[3]))
 end
 
+function my_inner_trivial(x, v1, v2)
+    return real(dot(v1[1], v2[1]))
+end
 
 
 

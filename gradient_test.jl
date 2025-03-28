@@ -7,14 +7,14 @@ using Zygote
 using OptimKit
 using KrylovKit
 
-χ = 16 # environment bond dimension
+χ = 24 # environment bond dimension
 D = 4 # PEPS bond dimension
 P = 2 # PEPS physical dimension
 p = P/2
 v = Int(D / 2)
 symm = Z2Irrep
 
-H = Fradkin_Shenker(InfiniteSquare(2,2); Jx=1, Jz=1, hx=0.9, hz=0.3, pdim=2, vdim=4);
+H = Fradkin_Shenker(InfiniteSquare(2,2); Jx=1, Jz=1, hx=0, hz=0, pdim=2, vdim=4);
 
 PA = Z2Space(0 => p, 1 => p)
 V = Z2Space(0 => v, 1 => v)
@@ -26,7 +26,7 @@ Bo = diag(rand(Float64,v,v));
 ctm_alg = SequentialCTMRG(;tol = 1e-6, verbosity = 4)
 env_init = CTMRGEnv(Ψ, Z2Space(0 => χ));
 env_init  = new_leading_boundary(env_init, Ψ, ctm_alg);
-
+dir = (A, Be, Bo)
 
 opt_alg = PEPSOptimize(;
     boundary_alg=ctm_alg,
@@ -57,26 +57,27 @@ opt_alg = PEPSOptimize(;
 #         gs
 #         return E, gs
 #     end
+steps = -0.01:0.005:0.01
 
-# alphas, fs, dfs1, dfs2 = OptimKit.optimtest(
-#             (A, Be, Bo, env_init),
-#             Ψ;
-#             alpha=0.01,
-#             retract = my_retract, inner=my_inner, scale! = my_scale!, add! = my_add!,
-#         ) do (A, Be, Bo, envs)
-#             E, g = Zygote.withgradient(peps) do A, Be, Bo
-#                 Ψ = peps_Gauge(A, Be, Bo)
-#                 env2, = hook_pullback(
-#                     new_leading_boundary,
-#                     envs,
-#                     Ψ,
-#                     opt_alg.boundary_alg;
-#                     alg_rrule=opt_alg.gradient_alg,
-#                 )
-#                 return costfun(Ψ, envs, H)
-#             end
+alphas, fs, dfs1, dfs2 = OptimKit.optimtest(
+            (A, Be, Bo, env_init),
+            dir;
+            alpha=steps,
+            retract = my_retract, inner=my_inner, 
+        ) do (A, Be, Bo, envs)
+            E, gs = Zygote.withgradient(A, Be, Bo) do A, Be, Bo
+                Ψ = peps_Gauge(A, Be, Bo)
+                envs´ = hook_pullback(
+                    new_leading_boundary,
+                    envs,
+                    Ψ,
+                    opt_alg.boundary_alg;
+                    alg_rrule=opt_alg.gradient_alg,
+                )
+                return costfun(Ψ, envs, H)
+            end
 
-#             return E, gs
-#         end
-#         @test dfs1 ≈ dfs2 atol = 1e-2
+            return E, gs
+        end
+        @test dfs1 ≈ dfs2 atol = 1e-2
     
