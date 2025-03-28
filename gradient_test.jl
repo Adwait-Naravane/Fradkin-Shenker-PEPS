@@ -74,7 +74,7 @@ alphas, fs, dfs1, dfs2 = OptimKit.optimtest(
                     opt_alg.boundary_alg;
                     alg_rrule=opt_alg.gradient_alg,
                 )
-                return costfun(Ψ, envs, H)
+                return costfun(Ψ,  envs´ , H)
             end
 
             return E, gs

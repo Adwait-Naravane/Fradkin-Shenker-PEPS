@@ -1,6 +1,6 @@
 include("new_toolbox.jl")
 BLAS.set_num_threads(20)
-χ = 16 # environment bond dimension
+χ = 10 # environment bond dimension
 D = 4 # PEPS bond dimension
 hx = 0
 hz = 0
@@ -76,8 +76,8 @@ opt_alg = PEPSOptimize(;
             end
             return costfun(Ψ, envs´ , H)
         end
-        gs
-        return E, gs
+        g = only(gs)
+        return E, g
     end
 
 

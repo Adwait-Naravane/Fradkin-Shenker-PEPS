@@ -199,6 +199,18 @@ function ChainRulesCore.rrule(::Type{<:InfinitePartitionFunction}, A::Matrix{<:P
     return Z, InfinitePartitionFunction_pullback
 end
 
+function ChainRulesCore.rrule(::Type{<:InfiniteSquareNetwork}, A::Matrix{<:PEPSKit.PartitionFunctionTensor})
+    Z = InfiniteSquareNetwork(A)
+
+    function InfiniteSquareNetwork_pullback(dZ)
+        return NoTangent(), PEPSKit.unitcell(dZ)
+    end
+    return Z, InfiniteSquareNetwork_pullback
+end
+
+
+
+
 function get_new_environment_Z(env::CTMRGEnv, Ψ::InfinitePEPS)
     P1, P2, U1, U2, S = gauge_isometries(Ψ[1, 2])
     S_inv = inv(sqrt(S))
