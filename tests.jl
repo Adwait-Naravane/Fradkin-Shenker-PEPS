@@ -76,8 +76,8 @@ opt_alg = PEPSOptimize(;
             end
             return costfun(Ψ, envs´ , H)
         end
-        g = only(gs)
-        return E, g
+        gs
+        return E, gs
     end
 
 
