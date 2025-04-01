@@ -108,10 +108,10 @@ version = "1.5.0"
     BandedMatrices = "aae01518-5342-5314-be14-df237901396f"
 
 [[deps.BlockTensorKit]]
-deps = ["BlockArrays", "LinearAlgebra", "Random", "Strided", "TensorKit", "TensorOperations", "TupleTools", "VectorInterface"]
-git-tree-sha1 = "d5c042f05f9bcd4309f1ec28131d847c5f07ece6"
+deps = ["BlockArrays", "Compat", "LinearAlgebra", "Random", "Strided", "TensorKit", "TensorOperations", "TupleTools", "VectorInterface"]
+git-tree-sha1 = "e0d455f2998aca33747def4f384c1aff5e3278de"
 uuid = "5f87ffc2-9cf1-4a46-8172-465d160bd8cd"
-version = "0.1.5"
+version = "0.1.6"
 
 [[deps.ChainRules]]
 deps = ["Adapt", "ChainRulesCore", "Compat", "Distributed", "GPUArraysCore", "IrrationalConstants", "LinearAlgebra", "Random", "RealDot", "SparseArrays", "SparseInverseSubset", "Statistics", "StructArrays", "SuiteSparse"]
@@ -212,10 +212,9 @@ uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 version = "1.11.0"
 
 [[deps.DocStringExtensions]]
-deps = ["LibGit2"]
-git-tree-sha1 = "2fb1e02f2b635d0845df5d7c167fec4dd739b00d"
+git-tree-sha1 = "e7b7e6f178525d17c720ab9c081e4ef04429f860"
 uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
-version = "0.9.3"
+version = "0.9.4"
 
 [[deps.FillArrays]]
 deps = ["LinearAlgebra"]
@@ -334,21 +333,6 @@ weakdeps = ["Serialization"]
     [deps.LRUCache.extensions]
     SerializationExt = ["Serialization"]
 
-[[deps.LibGit2]]
-deps = ["Base64", "LibGit2_jll", "NetworkOptions", "Printf", "SHA"]
-uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
-version = "1.11.0"
-
-[[deps.LibGit2_jll]]
-deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll"]
-uuid = "e37daf67-58a4-590a-8e99-b0245dd2ffc5"
-version = "1.7.2+0"
-
-[[deps.LibSSH2_jll]]
-deps = ["Artifacts", "Libdl", "MbedTLS_jll"]
-uuid = "29816b5a-b9ab-546f-933c-edad1886dfa8"
-version = "1.11.0+1"
-
 [[deps.Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 version = "1.11.0"
@@ -406,20 +390,11 @@ deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 version = "1.11.0"
 
-[[deps.MbedTLS_jll]]
-deps = ["Artifacts", "Libdl"]
-uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
-version = "2.28.6+0"
-
 [[deps.NaNMath]]
 deps = ["OpenLibm_jll"]
 git-tree-sha1 = "cc0a5deefdb12ab3a096f00a6d42133af4560d71"
 uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
 version = "1.1.2"
-
-[[deps.NetworkOptions]]
-uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
-version = "1.2.0"
 
 [[deps.OhMyThreads]]
 deps = ["BangBang", "ChunkSplitters", "StableTasks", "TaskLocalValues"]
@@ -600,9 +575,9 @@ weakdeps = ["SparseArrays"]
 
 [[deps.Strided]]
 deps = ["LinearAlgebra", "StridedViews", "TupleTools"]
-git-tree-sha1 = "f9ce8284e6eec72a21de3603493eb5355fcf7f39"
+git-tree-sha1 = "4a1128f5237b5d0170d934a2eb4fa7a273639c9f"
 uuid = "5e0ebb24-38b0-5f93-81fe-25c709ecae67"
-version = "2.2.0"
+version = "2.3.0"
 
 [[deps.StridedViews]]
 deps = ["LinearAlgebra", "PackageExtensionCompat"]

@@ -1,9 +1,9 @@
 include("new_toolbox.jl")
 BLAS.set_num_threads(20)
-χ = 10 # environment bond dimension
+χ = 16 # environment bond dimension
 D = 4 # PEPS bond dimension
 hx = 0
-hz = 0
+hz = 1
 P = 2 # PEPS physical dimension
 p = P/2
 v = Int(D / 2)
@@ -60,7 +60,7 @@ opt_alg = PEPSOptimize(;
 
 
 (A, Be, Bo, env), E, ∂E, numfg, convhistory = optimize(
-        (A, Be, Bo, env_init), opt_alg.optimizer_alg; retract = my_retract, inner=my_inner, scale! = my_scale!, add! = my_add!, finalize! = OptimKit._finalize!
+        (A, Be, Bo, env_init), opt_alg.optimizer_alg; retract = my_retract, inner=my_inner, (transport!)=(my_transport!), scale! = my_scale!, add! = my_add!, finalize! = OptimKit._finalize!
     ) do (A, Be, Bo, envs)
         E, gs = withgradient(A, Be, Bo) do A, Be, Bo
             Ψ = peps_Gauge(A, Be, Bo)

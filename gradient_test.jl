@@ -7,7 +7,7 @@ using Zygote
 using OptimKit
 using KrylovKit
 
-χ = 24 # environment bond dimension
+χ = 10 # environment bond dimension
 D = 4 # PEPS bond dimension
 P = 2 # PEPS physical dimension
 p = P/2
@@ -26,7 +26,7 @@ Bo = diag(rand(Float64,v,v));
 ctm_alg = SequentialCTMRG(;tol = 1e-6, verbosity = 4)
 env_init = CTMRGEnv(Ψ, Z2Space(0 => χ));
 env_init  = new_leading_boundary(env_init, Ψ, ctm_alg);
-dir = (A, Be, Bo)
+dir = (A, Be, Bo);
 
 opt_alg = PEPSOptimize(;
     boundary_alg=ctm_alg,
@@ -63,7 +63,7 @@ alphas, fs, dfs1, dfs2 = OptimKit.optimtest(
             (A, Be, Bo, env_init),
             dir;
             alpha=steps,
-            retract = my_retract, inner=my_inner, 
+            retract = my_retract, inner=my_inner
         ) do (A, Be, Bo, envs)
             E, gs = Zygote.withgradient(A, Be, Bo) do A, Be, Bo
                 Ψ = peps_Gauge(A, Be, Bo)

@@ -185,12 +185,13 @@ function partition_function_peps(Ψ::InfinitePEPS)
     # Z_buffer = InfinitePartitionFunction(TensorMap(zeros, ComplexF64, space(P2, 1) ⊗ space(P2, 1) ← space(P1, 3)' ⊗ space(P1, 3)'))
     # A_bar = Zygote.Buffer(Z_buffer.A)
     @tensor A_bar[-1 -2; -3 -4] := squashed_A[1 2 3 4; 5 6 7 8] * P2[-1; 1 2] * P2[-2; 3 4] * P1[5 6; -3] * P1[7 8; -4]
-
-    return InfinitePartitionFunction(A_bar)
+    m = Zygote.Buffer(Matrix{typeof(A_bar)}(undef, 1, 1))
+    m[1,1] = A_bar
+    return InfiniteSquareNetwork(copy(m))
 end
 
 
-function ChainRulesCore.rrule(::Type{<:InfinitePartitionFunction}, A::Matrix{<:PEPSKit.PartitionFunctionTensor})
+function ChainRulesCore.rrule(::Type{<:InfinitePartitionFunction}, A::Matrix{<:AbstractTensorMap{ComplexF64, S, 2, 2} where S<:ElementarySpace})
     Z = InfinitePartitionFunction(A)
 
     function InfinitePartitionFunction_pullback(dZ)
@@ -199,7 +200,7 @@ function ChainRulesCore.rrule(::Type{<:InfinitePartitionFunction}, A::Matrix{<:P
     return Z, InfinitePartitionFunction_pullback
 end
 
-function ChainRulesCore.rrule(::Type{<:InfiniteSquareNetwork}, A::Matrix{<:PEPSKit.PartitionFunctionTensor})
+function ChainRulesCore.rrule(::Type{<:InfiniteSquareNetwork}, A::Matrix{<:AbstractTensorMap{ComplexF64, S, 2, 2} where S<:ElementarySpace})
     Z = InfiniteSquareNetwork(A)
 
     function InfiniteSquareNetwork_pullback(dZ)
@@ -459,13 +460,25 @@ function my_retract(x, dx, α)
     A, Be, Bo, env = deepcopy(x)
     dA, dBe, dBo = dx
 
-    A += α * dA
-    Be += α * dBe
-    Bo += α * dBo
+    A, dxA = PEPSKit.norm_preserving_retract(A, dA, α)
+    Be, dxBe = PEPSKit.norm_preserving_retract(Be, dBe, α)
+    Bo, dxBo = PEPSKit.norm_preserving_retract(Bo, dBo, α)
 
     # env = leading_boundary(env, peps_Gauge(A, Be, Bo), ctm_alg)
 
-    return (A, Be, Bo, env), dx
+    return (A, Be, Bo, env), (dxA, dxBe, dxBo)
+end
+
+function my_transport!(ξ, x, dx, α, A´)
+    A, Be, Bo, env = deepcopy(x)
+    dA, dBe, dBo = dx
+    ξA, ξBe, ξBo = ξ
+
+    ξA = PEPSKit.norm_preserving_transport!(ξA, A, dA, α, A´)
+    ξBe = PEPSKit.norm_preserving_transport!(ξBe, Be, dBe, α, A´)
+    ξBo = PEPSKit.norm_preserving_transport!(ξBo, Bo, dBo, α, A´)
+
+    return (ξA, ξBe, ξBo)
 end
 
 function my_retract_trivial(x, dx, α)
