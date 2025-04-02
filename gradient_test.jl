@@ -19,8 +19,8 @@ H = Fradkin_Shenker(InfiniteSquare(2,2); Jx=1, Jz=1, hx=0, hz=0, pdim=2, vdim=4)
 PA = Z2Space(0 => p, 1 => p)
 V = Z2Space(0 => v, 1 => v)
 A = TensorMap(randn, ComplexF64, PA ← V ⊗ V ⊗ V' ⊗ V');
-Be = diag(rand(Float64,v,v));
-Bo = diag(rand(Float64,v,v));
+Be = exp.(1im*diag(rand(Float64,v,v)));
+Bo = exp.(1im*diag(rand(Float64,v,v)));
 
 Ψ = peps_Gauge(A, Be, Bo);
 ctm_alg = SequentialCTMRG(;tol = 1e-6, verbosity = 4)

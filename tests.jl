@@ -1,9 +1,12 @@
+using Pkg
+
+Pkg.instantiate()
 include("new_toolbox.jl")
-BLAS.set_num_threads(20)
-χ = 16 # environment bond dimension
+
+χ = 24 # environment bond dimension
 D = 4 # PEPS bond dimension
 hx = 0
-hz = 1
+hz = 0.9
 P = 2 # PEPS physical dimension
 p = P/2
 v = Int(D / 2)
@@ -16,6 +19,8 @@ V = Z2Space(0 => v, 1 => v)
 A = TensorMap(randn, ComplexF64, PA ← V ⊗ V ⊗ V' ⊗ V');
 Be = exp.(1im*diag(rand(Float64,v,v)));
 Bo = exp.(1im*diag(rand(Float64,v,v)));
+# Be = diag(rand(Float64,v,v));
+# Bo = diag(rand(Float64,v,v));
 
 Ψ = peps_Gauge(A, Be, Bo);
 #Ψ = peps_Gauge_trivial(A);
@@ -38,7 +43,7 @@ opt_alg = PEPSOptimize(;
 # env_init = new_leading_boundary(env_init, Ψ, ctm_alg);
 
 # (A, env), E, ∂E, numfg, convhistory = optimize(
-#         (A, env_init), opt_alg.optimizer_alg; retract = my_retract_trivial, inner=my_inner_trivial, scale! = my_scale!, add! = my_add!, finalize! = OptimKit._finalize!
+#         (A, env_init), opt_alg.optimizer_alg; retract = my_retract_trivial, inner=my_inner_trivial, (transport!)=(my_transport_trivial!), scale! = my_scale!, add! = my_add!, finalize! = OptimKit._finalize!
 #     ) do (A, envs)
 #         E, gs = withgradient(A) do A
 #             Ψ = peps_Gauge_trivial(A)
@@ -52,7 +57,7 @@ opt_alg = PEPSOptimize(;
 #             ignore_derivatives() do
 #                 opt_alg.reuse_env && update!(envs, envs´)
 #             end
-#             return costfun(Ψ, envs, H)
+#             return costfun(Ψ, envs´, H)
 #         end
 #         gs
 #         return E, gs
@@ -84,7 +89,7 @@ opt_alg = PEPSOptimize(;
 new_Ψ = peps_Gauge(A, Be, Bo);
 #new_Ψ = peps_Gauge_trivial(A);
 
-file = jldopen("Saved_content/final_Psi_phases_hx=$(hx)_hz=$(hz)_χ=$(χ)_D=$(D).jld2", "w")
+file = jldopen("final_Psi_phases_hx=$(hx)_hz=$(hz)_χ=$(χ)_D=$(D).jld2", "w")
 file["Ψ"] = new_Ψ
 file["env"] = env
 close(file)

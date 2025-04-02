@@ -1,5 +1,5 @@
 # ======================
-JOBNAME = Gauge-D4-chi24-hx0-hz0
+JOBNAME = Gauge-phases-D4-chi24-hx0-hz0.9
 UG_NAME = anaravan
 
 request_cpus = 40
@@ -12,7 +12,7 @@ nice_user = TRUE
 arguments = --project=. tests.jl
 transfer_input_files = tests.jl, new_toolbox.jl, Project.toml
 
-transfer_output_files = CTMHOTRG-ising-32.csv
+transfer_output_files = final_Psi_phases_hx=0_hz=0.9_χ=24_D=4.jld2
 # ======================
 
 should_transfer_files   = TRUE

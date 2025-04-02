@@ -1,0 +1,68 @@
+000 (1096.000.000) 2025-04-02 11:43:49 Job submitted from host: <157.193.72.74:9618?addrs=157.193.72.74-9618&alias=octopus.ugent.be&noUDP&sock=schedd_1686_08c4>
+...
+040 (1096.000.000) 2025-04-02 11:44:09 Started transferring input files
+	Transferring to host: <157.193.228.151:9618?addrs=157.193.228.151-9618&alias=erquaf.ugent.be&noUDP&sock=slot1_2_2646379_2877_731>
+...
+040 (1096.000.000) 2025-04-02 11:44:09 Finished transferring input files
+...
+001 (1096.000.000) 2025-04-02 11:44:09 Job executing on host: <157.193.228.151:9618?addrs=157.193.228.151-9618&alias=erquaf.ugent.be&noUDP&sock=startd_2646206_cae1>
+	SlotName: slot1_2@erquaf.ugent.be
+	AvailableGPUs = {  }
+	CondorScratchDir = "/var/lib/condor/execute/dir_2298374"
+	Cpus = 40
+	Disk = 2098176
+	GPUs = 0
+	Memory = 65536
+...
+006 (1096.000.000) 2025-04-02 11:44:17 Image size of job updated: 311864
+	305  -  MemoryUsage of job (MB)
+	311864  -  ResidentSetSize of job (KB)
+...
+006 (1096.000.000) 2025-04-02 11:49:17 Image size of job updated: 2184812
+	1350  -  MemoryUsage of job (MB)
+	1382384  -  ResidentSetSize of job (KB)
+...
+006 (1096.000.000) 2025-04-02 11:54:18 Image size of job updated: 2704276
+	2641  -  MemoryUsage of job (MB)
+	2704276  -  ResidentSetSize of job (KB)
+...
+006 (1096.000.000) 2025-04-02 11:59:18 Image size of job updated: 3994052
+	3841  -  MemoryUsage of job (MB)
+	3932244  -  ResidentSetSize of job (KB)
+...
+006 (1096.000.000) 2025-04-02 12:04:19 Image size of job updated: 4793504
+	4605  -  MemoryUsage of job (MB)
+	4714996  -  ResidentSetSize of job (KB)
+...
+006 (1096.000.000) 2025-04-02 12:09:19 Image size of job updated: 12193216
+	11908  -  MemoryUsage of job (MB)
+	12193216  -  ResidentSetSize of job (KB)
+...
+006 (1096.000.000) 2025-04-02 12:10:51 Image size of job updated: 12820344
+	11908  -  MemoryUsage of job (MB)
+	12193216  -  ResidentSetSize of job (KB)
+...
+040 (1096.000.000) 2025-04-02 12:10:52 Started transferring output files
+...
+040 (1096.000.000) 2025-04-02 12:10:52 Finished transferring output files
+...
+005 (1096.000.000) 2025-04-02 12:10:52 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 02:57:03, Sys 0 00:04:30  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 02:57:03, Sys 0 00:04:30  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	819546  -  Run Bytes Sent By Job
+	21291  -  Run Bytes Received By Job
+	819546  -  Total Bytes Sent By Job
+	21291  -  Total Bytes Received By Job
+	Partitionable Resources :     Usage  Request Allocated 
+	   Cpus                 :     21.81       40        40 
+	   Disk (KB)            : 175144     2097152   2098176 
+	   GPUs                 :                            0 
+	   Memory (MB)          :  11908       65536     65536 
+	   TimeExecute (s)      :   1602                       
+	   TimeSlotBusy (s)     :   1603                       
+
+	Job terminated of its own accord at 2025-04-02T10:10:48Z with exit-code 0.
+...

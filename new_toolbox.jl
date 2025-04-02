@@ -10,7 +10,6 @@ using MPSKitModels
 
 using Zygote
 using ChainRulesCore
-using Dates
 using JLD2
 
 using PEPSKit: PEPSTensor, CTMRGEnv, NORTH, SOUTH, WEST, EAST, NORTHWEST, NORTHEAST, SOUTHEAST, SOUTHWEST, _prev, _next, GradMode
@@ -123,8 +122,8 @@ function ChainRulesCore.rrule(::typeof(peps_Gauge), A::PEPSTensor, Be::Vector{Fl
         to = only(filter(((s, f),) -> f.uncoupled[2] == Irrep[ℤ₂](1), trees))
         dBe = diag(dBW[te[1], te[2]][1, 1, :, 1, :])
         dBo = diag(dBW[to[1], to[2]][2, 1, :, 1, :])
-
-        return NoTangent(), dA, real(dBe), real(dBo)
+        
+        return NoTangent(), dA, collect(real(dBe)), collect(real(dBo))
     end
     return Ψ, peps_Gauge_pullback
 end
@@ -141,8 +140,8 @@ function ChainRulesCore.rrule(::typeof(peps_Gauge), A::PEPSTensor, Be::Vector{Co
         to = only(filter(((s, f),) -> f.uncoupled[2] == Irrep[ℤ₂](1), trees))
         dBe = diag(dBW[te[1], te[2]][1, 1, :, 1, :])
         dBo = diag(dBW[to[1], to[2]][2, 1, :, 1, :])
-
-        return NoTangent(), dA, real(dBe), real(dBo)
+        
+        return NoTangent(), dA, collect(dBe), collect(dBo)
     end
     return Ψ, peps_Gauge_pullback
 end
@@ -454,18 +453,31 @@ function triplebond(lattice::InfiniteSquare)
     end
     return neighbors
 end
+function my_retract_old(x, dx, α)
+    A, Be, Bo, env = deepcopy(x)
+    dA, dBe, dBo = dx
+    A += α * dA
+    Be += α * dBe
+    Bo += α * dBo
+
+    # env = leading_boundary(env, peps_Gauge(A, Be, Bo), ctm_alg)
+    
+    return (A, Be, Bo, env), dx
+end
 
 
 function my_retract(x, dx, α)
     A, Be, Bo, env = deepcopy(x)
     dA, dBe, dBo = dx
-
+    
+    
     A, dxA = PEPSKit.norm_preserving_retract(A, dA, α)
     Be, dxBe = PEPSKit.norm_preserving_retract(Be, dBe, α)
     Bo, dxBo = PEPSKit.norm_preserving_retract(Bo, dBo, α)
 
     # env = leading_boundary(env, peps_Gauge(A, Be, Bo), ctm_alg)
-
+    
+    
     return (A, Be, Bo, env), (dxA, dxBe, dxBo)
 end
 
@@ -474,10 +486,11 @@ function my_transport!(ξ, x, dx, α, A´)
     dA, dBe, dBo = dx
     ξA, ξBe, ξBo = ξ
 
+    
     ξA = PEPSKit.norm_preserving_transport!(ξA, A, dA, α, A´)
     ξBe = PEPSKit.norm_preserving_transport!(ξBe, Be, dBe, α, A´)
     ξBo = PEPSKit.norm_preserving_transport!(ξBo, Bo, dBo, α, A´)
-
+    
     return (ξA, ξBe, ξBo)
 end
 
@@ -491,6 +504,16 @@ function my_retract_trivial(x, dx, α)
     # env = leading_boundary(env, peps_Gauge(A, Be, Bo), ctm_alg)
 
     return (A, env), dx
+end
+
+function my_transport_trivial!(ξ, x, dx, α, A´)
+    A, env = deepcopy(x)
+    dA, = dx
+    ξA, = ξ
+
+    ξA = PEPSKit.norm_preserving_transport!(ξA, A, dA, α, A´)
+    
+    return (ξA,)
 end
 
 function my_scale!(v, α)
