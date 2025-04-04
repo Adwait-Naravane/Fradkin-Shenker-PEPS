@@ -498,12 +498,12 @@ function my_retract_trivial(x, dx, α)
     A, env = deepcopy(x)
     dA, = dx
 
-    A += α * dA
-
+    #A += α * dA
+    A, dxA = PEPSKit.norm_preserving_retract(A, dA, α)
 
     # env = leading_boundary(env, peps_Gauge(A, Be, Bo), ctm_alg)
 
-    return (A, env), dx
+    return (A, env), (dxA,)
 end
 
 function my_transport_trivial!(ξ, x, dx, α, A´)
