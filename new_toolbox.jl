@@ -78,6 +78,68 @@ function peps_Gauge(A::PEPSTensor, Be::Vector{ComplexF64}, Bo::Vector{ComplexF64
     return InfinitePEPS([A BW; BD T])
 end
 
+function peps_Gauge(A::PEPSTensor, Be::Matrix{ComplexF64}, Bo::Matrix{ComplexF64})
+    p = 1
+    v = Int(D / 2)
+
+    PB = Z2Space(0 => 2 * p)
+    V = Z2Space(0 => v, 1 => v)
+    II = Z2Space(0 => 1)
+
+    BW = TensorMap(zeros, ComplexF64, PB ← II ⊗ V ⊗ (II)' ⊗ (V)')
+    BD = TensorMap(zeros, ComplexF64, PB ← V ⊗ II ⊗ (V)' ⊗ (II)')
+    T = TensorMap(ones, ComplexF64, II ← II ⊗ II ⊗ (II)' ⊗ (II)')
+
+    for (s, f) in fusiontrees(BW)
+        if f.uncoupled[2] == Irrep[ℤ₂](0)
+            BW[s, f][1, 1, :, 1, :] = Be
+        else
+            BW[s, f][2, 1, :, 1, :] = Bo
+        end
+    end
+
+    for (s, f) in fusiontrees(BD)
+        if f.uncoupled[1] == Irrep[ℤ₂](0)
+            BD[s, f][1, :, 1, :, 1] = Be
+        else
+            BD[s, f][2, :, 1, :, 1] = Bo
+        end
+    end
+
+    return InfinitePEPS([A BW; BD T])
+end
+
+
+function peps_Gauge(A::PEPSTensor, Be::Matrix{Float64}, Bo::Matrix{Float64})
+    p = 1
+    v = Int(D / 2)
+
+    PB = Z2Space(0 => 2 * p)
+    V = Z2Space(0 => v, 1 => v)
+    II = Z2Space(0 => 1)
+
+    BW = TensorMap(zeros, ComplexF64, PB ← II ⊗ V ⊗ (II)' ⊗ (V)')
+    BD = TensorMap(zeros, ComplexF64, PB ← V ⊗ II ⊗ (V)' ⊗ (II)')
+    T = TensorMap(ones, ComplexF64, II ← II ⊗ II ⊗ (II)' ⊗ (II)')
+
+    for (s, f) in fusiontrees(BW)
+        if f.uncoupled[2] == Irrep[ℤ₂](0)
+            BW[s, f][1, 1, :, 1, :] = Be
+        else
+            BW[s, f][2, 1, :, 1, :] = Bo
+        end
+    end
+
+    for (s, f) in fusiontrees(BD)
+        if f.uncoupled[1] == Irrep[ℤ₂](0)
+            BD[s, f][1, :, 1, :, 1] = Be
+        else
+            BD[s, f][2, :, 1, :, 1] = Bo
+        end
+    end
+
+    return InfinitePEPS([A BW; BD T])
+end
 
 function peps_Gauge_trivial(A::PEPSTensor)
     p = 1
@@ -122,7 +184,7 @@ function ChainRulesCore.rrule(::typeof(peps_Gauge), A::PEPSTensor, Be::Vector{Fl
         to = only(filter(((s, f),) -> f.uncoupled[2] == Irrep[ℤ₂](1), trees))
         dBe = diag(dBW[te[1], te[2]][1, 1, :, 1, :])
         dBo = diag(dBW[to[1], to[2]][2, 1, :, 1, :])
-        
+
         return NoTangent(), dA, collect(real(dBe)), collect(real(dBo))
     end
     return Ψ, peps_Gauge_pullback
@@ -140,7 +202,43 @@ function ChainRulesCore.rrule(::typeof(peps_Gauge), A::PEPSTensor, Be::Vector{Co
         to = only(filter(((s, f),) -> f.uncoupled[2] == Irrep[ℤ₂](1), trees))
         dBe = diag(dBW[te[1], te[2]][1, 1, :, 1, :])
         dBo = diag(dBW[to[1], to[2]][2, 1, :, 1, :])
-        
+
+        return NoTangent(), dA, collect(dBe), collect(dBo)
+    end
+    return Ψ, peps_Gauge_pullback
+end
+
+function ChainRulesCore.rrule(::typeof(peps_Gauge), A::PEPSTensor, Be::Matrix{ComplexF64}, Bo::Matrix{ComplexF64})
+    Ψ = peps_Gauge(A, Be, Bo)
+
+    function peps_Gauge_pullback(dΨ)
+        dA = dΨ[1, 1]
+        dBW = dΨ[1, 2]
+
+        trees = collect(fusiontrees(dBW))
+        te = only(filter(((s, f),) -> f.uncoupled[2] == Irrep[ℤ₂](0), trees))
+        to = only(filter(((s, f),) -> f.uncoupled[2] == Irrep[ℤ₂](1), trees))
+        dBe = dBW[te[1], te[2]][1, 1, :, 1, :]
+        dBo = dBW[to[1], to[2]][2, 1, :, 1, :]
+
+        return NoTangent(), dA, collect(dBe), collect(dBo)
+    end
+    return Ψ, peps_Gauge_pullback
+end
+
+function ChainRulesCore.rrule(::typeof(peps_Gauge), A::PEPSTensor, Be::Matrix{Float64}, Bo::Matrix{Float64})
+    Ψ = peps_Gauge(A, Be, Bo)
+
+    function peps_Gauge_pullback(dΨ)
+        dA = dΨ[1, 1]
+        dBW = dΨ[1, 2]
+
+        trees = collect(fusiontrees(dBW))
+        te = only(filter(((s, f),) -> f.uncoupled[2] == Irrep[ℤ₂](0), trees))
+        to = only(filter(((s, f),) -> f.uncoupled[2] == Irrep[ℤ₂](1), trees))
+        dBe = dBW[te[1], te[2]][1, 1, :, 1, :]
+        dBo = dBW[to[1], to[2]][2, 1, :, 1, :]
+
         return NoTangent(), dA, collect(dBe), collect(dBo)
     end
     return Ψ, peps_Gauge_pullback
@@ -185,12 +283,12 @@ function partition_function_peps(Ψ::InfinitePEPS)
     # A_bar = Zygote.Buffer(Z_buffer.A)
     @tensor A_bar[-1 -2; -3 -4] := squashed_A[1 2 3 4; 5 6 7 8] * P2[-1; 1 2] * P2[-2; 3 4] * P1[5 6; -3] * P1[7 8; -4]
     m = Zygote.Buffer(Matrix{typeof(A_bar)}(undef, 1, 1))
-    m[1,1] = A_bar
+    m[1, 1] = A_bar
     return InfiniteSquareNetwork(copy(m))
 end
 
 
-function ChainRulesCore.rrule(::Type{<:InfinitePartitionFunction}, A::Matrix{<:AbstractTensorMap{ComplexF64, S, 2, 2} where S<:ElementarySpace})
+function ChainRulesCore.rrule(::Type{<:InfinitePartitionFunction}, A::Matrix{<:AbstractTensorMap{ComplexF64,S,2,2} where {S<:ElementarySpace}})
     Z = InfinitePartitionFunction(A)
 
     function InfinitePartitionFunction_pullback(dZ)
@@ -199,7 +297,7 @@ function ChainRulesCore.rrule(::Type{<:InfinitePartitionFunction}, A::Matrix{<:A
     return Z, InfinitePartitionFunction_pullback
 end
 
-function ChainRulesCore.rrule(::Type{<:InfiniteSquareNetwork}, A::Matrix{<:AbstractTensorMap{ComplexF64, S, 2, 2} where S<:ElementarySpace})
+function ChainRulesCore.rrule(::Type{<:InfiniteSquareNetwork}, A::Matrix{<:AbstractTensorMap{ComplexF64,S,2,2} where {S<:ElementarySpace}})
     Z = InfiniteSquareNetwork(A)
 
     function InfiniteSquareNetwork_pullback(dZ)
@@ -425,11 +523,10 @@ function Fradkin_Shenker(T::Type{<:Number},
     gauge_sites = filter(idx -> (isodd(idx[1]) && iseven(idx[2])) || (iseven(idx[1]) && isodd(idx[2])), PEPSKit.vertices(lattice))
     return PEPSKit.LocalOperator(
         spaces,
-        (plaq => -Jz * PLAQ for plaq in plaqs)...,
-        (bond => -hz * B for bond in bonds)...,
         ((matter,) => -Jx * Z for matter in matter_sites)...,
+        (plaq => -Jz * PLAQ for plaq in plaqs)...,
         ((gauge,) => -hx * GZ for gauge in gauge_sites)...,
-    )
+        (bond => -hz * B for bond in bonds)...,)
 
 end
 
@@ -461,23 +558,41 @@ function my_retract_old(x, dx, α)
     Bo += α * dBo
 
     # env = leading_boundary(env, peps_Gauge(A, Be, Bo), ctm_alg)
-    
+
     return (A, Be, Bo, env), dx
+end
+
+my_symmetrize(A::PEPSKit.PEPSTensor) = PEPSKit.herm_depth_inv(PEPSKit.rot_inv(A))
+
+function my_symmetrize(x::Tuple{PEPSKit.PEPSTensor,Vector{Float64},Vector{Float64}})
+    A, Be, Bo = x
+    A = my_symmetrize(A)
+
+    return (A, Be, Bo)
+end
+
+function my_symmetrize(x::Tuple{PEPSKit.PEPSTensor})
+    A, = x
+    A = my_symmetrize(A)
+
+    return (A,)
 end
 
 
 function my_retract(x, dx, α)
     A, Be, Bo, env = deepcopy(x)
     dA, dBe, dBo = dx
-    
-    
+
+
     A, dxA = PEPSKit.norm_preserving_retract(A, dA, α)
     Be, dxBe = PEPSKit.norm_preserving_retract(Be, dBe, α)
     Bo, dxBo = PEPSKit.norm_preserving_retract(Bo, dBo, α)
 
+    A = my_symmetrize(A)
+    dxA = my_symmetrize(dxA)
     # env = leading_boundary(env, peps_Gauge(A, Be, Bo), ctm_alg)
-    
-    
+
+
     return (A, Be, Bo, env), (dxA, dxBe, dxBo)
 end
 
@@ -486,11 +601,11 @@ function my_transport!(ξ, x, dx, α, A´)
     dA, dBe, dBo = dx
     ξA, ξBe, ξBo = ξ
 
-    
+
     ξA = PEPSKit.norm_preserving_transport!(ξA, A, dA, α, A´)
     ξBe = PEPSKit.norm_preserving_transport!(ξBe, Be, dBe, α, A´)
     ξBo = PEPSKit.norm_preserving_transport!(ξBo, Bo, dBo, α, A´)
-    
+
     return (ξA, ξBe, ξBo)
 end
 
@@ -500,7 +615,8 @@ function my_retract_trivial(x, dx, α)
 
     #A += α * dA
     A, dxA = PEPSKit.norm_preserving_retract(A, dA, α)
-
+    A = my_symmetrize(A)
+    dxA = my_symmetrize(dxA)
     # env = leading_boundary(env, peps_Gauge(A, Be, Bo), ctm_alg)
 
     return (A, env), (dxA,)
@@ -512,7 +628,7 @@ function my_transport_trivial!(ξ, x, dx, α, A´)
     ξA, = ξ
 
     ξA = PEPSKit.norm_preserving_transport!(ξA, A, dA, α, A´)
-    
+
     return (ξA,)
 end
 
