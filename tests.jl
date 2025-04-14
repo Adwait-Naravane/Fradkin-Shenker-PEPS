@@ -1,23 +1,22 @@
 using Pkg
 Pkg.instantiate()
-using Profile
 # Get command-line arguments: hx, hz, χ, D
-# if length(ARGS) < 4
-#     error("Usage: julia tests.jl <hx> <hz> <χ> <D>")
-# end
+if length(ARGS) < 4
+    error("Usage: julia tests.jl <hx> <hz> <χ> <D>")
+end
 
-# hx = parse(Float64, ARGS[1])
-# hz = parse(Float64, ARGS[2])
-# χ  = parse(Int, ARGS[3])
-# D  = parse(Int, ARGS[4])
+hx = parse(Float64, ARGS[1])
+hz = parse(Float64, ARGS[2])
+χ  = parse(Int, ARGS[3])
+D  = parse(Int, ARGS[4])
 
-# println("Running with: hx=$hx, hz=$hz, χ=$χ, D=$D")
+println("Running with: hx=$hx, hz=$hz, χ=$χ, D=$D")
 include("new_toolbox.jl")
 
-χ = 24 # environment bond dimension
-D = 4 # PEPS bond dimension
-hx = 0
-hz = 0
+# χ = 24 # environment bond dimension
+# D = 4 # PEPS bond dimension
+# hx = 0
+# hz = 0
 P = 2 # PEPS physical dimension
 p = P / 2
 v = Int(D / 2)
@@ -45,7 +44,7 @@ env_init = new_leading_boundary(env_init, Ψ, ctm_alg);
 
 opt_alg = PEPSOptimize(;
     boundary_alg=ctm_alg,
-    optimizer_alg=LBFGS(3; gradtol=1e-3, verbosity=4),
+    optimizer_alg=LBFGS(8; gradtol=1e-4, verbosity=4),
     gradient_alg=LinSolver(; iterscheme=:diffgauge),
 )
 
