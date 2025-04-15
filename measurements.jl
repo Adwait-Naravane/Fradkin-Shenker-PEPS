@@ -27,4 +27,4 @@ Z = partition_function_peps(new_Ψ)
 env_Z = get_new_environment_Z(env, new_Ψ)
 
 
-ξ = correlation_length(Z, env_Z)
+ξv, ξh = correlation_length(Z, env_Z)
