@@ -1,7 +1,7 @@
-hx_vals=(0.1 0.2 0.3 0.32 0.33 0.34 0.5 1.0)
-hz_vals=(0.1 0.2 0.3 0.32 0.33 0.34 0.5 1.0)
-chi_vals=(36)
-D_vals=(4)
+hx_vals=(0.1 0.2 0.25 0.3 0.31 0.32 0.325 0.33 0.335 0.34 0.35 0.36 0.37 0.38 0.39 0.4 0.5 0.6 0.7 0.8 0.9 1.0)
+hz_vals=(0.1 0.2 0.25 0.3 0.31 0.32 0.325 0.33 0.335 0.34 0.35 0.36 0.37 0.38 0.39 0.4 0.5 0.6 0.7 0.8 0.9 1.0)
+chi_vals=(48)
+D_vals=(4 6)
 
 for hx in "${hx_vals[@]}"; do
   for hz in "${hz_vals[@]}"; do
@@ -12,7 +12,6 @@ for hx in "${hx_vals[@]}"; do
         cat > job_${hx}_${hz}_chi${chi}_D${D}.sub <<EOF
 JOBNAME = ${JOBNAME}
 UG_NAME = anaravan
-
 request_cpus = 20
 request_memory = 64 G
 request_disk = 2 G
@@ -23,7 +22,7 @@ nice_user = TRUE
 arguments = --project=. tests.jl ${hx} ${hz} ${chi} ${D}
 transfer_input_files = tests.jl, new_toolbox.jl, Project.toml
 
-transfer_output_files = final_Psi_trivial_hx=${hx}_hz=${hz}_χ=${chi}_D=${D}.jld2
+transfer_output_files = final_Psi_trivial_1e4_hx=${hx}_hz=${hz}_χ=${chi}_D=${D}.jld2
 
 should_transfer_files   = TRUE
 preserve_relative_paths = TRUE
