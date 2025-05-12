@@ -1,0 +1,626 @@
+  Installing known registries into `~/.julia`
+       Added `General` registry to ~/.julia/registries
+    Updating registry at `~/.julia/registries/General.toml`
+   Installed TaskLocalValues ───────────── v0.1.2
+   Installed GPUArraysCore ─────────────── v0.2.0
+   Installed RealDot ───────────────────── v0.1.0
+   Installed IrrationalConstants ───────── v0.2.4
+   Installed IRTools ───────────────────── v0.4.14
+   Installed JLD2 ──────────────────────── v0.5.12
+   Installed OhMyThreads ───────────────── v0.7.0
+   Installed BlockTensorKit ────────────── v0.1.6
+   Installed Adapt ─────────────────────── v4.3.0
+   Installed LRUCache ──────────────────── v1.6.2
+   Installed PtrArrays ─────────────────── v1.3.0
+   Installed DiffRules ─────────────────── v1.15.1
+   Installed IntegerMathUtils ──────────── v0.1.2
+   Installed TableTraits ───────────────── v1.0.1
+   Installed Accessors ─────────────────── v0.1.42
+   Installed Preferences ───────────────── v1.4.3
+   Installed DiffResults ───────────────── v1.1.0
+   Installed HashArrayMappedTries ──────── v0.2.0
+   Installed Tables ────────────────────── v1.12.0
+   Installed SpecialFunctions ──────────── v2.5.1
+   Installed OptimKit ──────────────────── v0.4.0
+   Installed LoggingExtras ─────────────── v1.0.3
+   Installed ChunkSplitters ────────────── v3.1.2
+   Installed WignerSymbols ─────────────── v2.0.0
+   Installed DataAPI ───────────────────── v1.16.0
+   Installed Primes ────────────────────── v0.5.7
+   Installed StaticArrays ──────────────── v1.9.13
+   Installed RecipesBase ───────────────── v1.3.4
+   Installed TensorKit ─────────────────── v0.14.5
+   Installed Zygote ────────────────────── v0.7.6
+   Installed AbstractFFTs ──────────────── v1.5.0
+   Installed MPSKit ────────────────────── v0.12.6
+   Installed JLLWrappers ───────────────── v1.7.0
+   Installed BlockArrays ───────────────── v1.6.1
+   Installed StaticArraysCore ──────────── v1.4.3
+   Installed Richardson ────────────────── v1.4.2
+   Installed NaNMath ───────────────────── v1.1.3
+   Installed FiniteDifferences ─────────── v0.12.32
+   Installed IteratorInterfaceExtensions ─ v1.0.0
+   Installed PrecompileTools ───────────── v1.2.1
+   Installed ConstructionBase ──────────── v1.5.8
+   Installed DataValueInterfaces ───────── v1.0.0
+   Installed OrderedCollections ────────── v1.8.0
+   Installed StructArrays ──────────────── v0.7.1
+   Installed StableTasks ───────────────── v0.1.7
+   Installed TranscodingStreams ────────── v0.11.3
+   Installed RationalRoots ─────────────── v0.2.1
+   Installed ChainRulesCore ────────────── v1.25.1
+   Installed ScopedValues ──────────────── v1.3.0
+   Installed TensorKitSectors ──────────── v0.1.4
+   Installed InitialValues ─────────────── v0.3.1
+   Installed VectorInterface ───────────── v0.5.0
+   Installed FillArrays ────────────────── v1.13.0
+   Installed Statistics ────────────────── v1.11.1
+   Installed ForwardDiff ───────────────── v1.0.1
+   Installed FileIO ────────────────────── v1.17.0
+   Installed ChainRules ────────────────── v1.72.3
+   Installed MPSKitModels ──────────────── v0.4.1
+   Installed LogExpFunctions ───────────── v0.3.29
+   Installed CommonSubexpressions ──────── v0.3.1
+   Installed Requires ──────────────────── v1.3.1
+   Installed ZygoteRules ───────────────── v0.2.7
+   Installed StridedViews ──────────────── v0.4.1
+   Installed BangBang ──────────────────── v0.4.4
+   Installed HalfIntegers ──────────────── v1.6.0
+   Installed Strided ───────────────────── v2.3.0
+   Installed PackageExtensionCompat ────── v1.0.2
+   Installed MacroTools ────────────────── v0.5.15
+   Installed Compat ────────────────────── v4.16.0
+   Installed CompositionsBase ──────────── v0.1.2
+   Installed OpenSpecFun_jll ───────────── v0.5.6+0
+   Installed SparseInverseSubset ───────── v0.1.2
+   Installed InverseFunctions ──────────── v0.1.17
+   Installed TensorKitManifolds ────────── v0.7.2
+   Installed TupleTools ────────────────── v1.6.0
+   Installed TensorOperations ──────────── v5.2.0
+   Installed KrylovKit ─────────────────── v0.9.5
+   Installed PEPSKit ───────────────────── v0.5.0
+   Installed DocStringExtensions ───────── v0.9.4
+   Installed ArrayLayouts ──────────────── v1.11.1
+    Updating `/var/lib/condor/execute/dir_1120055/Project.toml`
+  [d360d2e6] + ChainRulesCore v1.25.1
+  [033835bb] + JLD2 v0.5.12
+  [0b1a1467] + KrylovKit v0.9.5
+  [bb1c41ca] + MPSKit v0.12.6
+  [ca635005] + MPSKitModels v0.4.1
+  [77e91f04] + OptimKit v0.4.0
+  [52969e89] + PEPSKit v0.5.0
+  [07d1fe3e] + TensorKit v0.14.5
+  [409d34a3] + VectorInterface v0.5.0
+  [e88e6eb3] + Zygote v0.7.6
+  [37e2e46d] ~ LinearAlgebra ⇒ v1.11.0
+    Updating `/var/lib/condor/execute/dir_1120055/Manifest.toml`
+  [621f4979] + AbstractFFTs v1.5.0
+  [7d9f7c33] + Accessors v0.1.42
+  [79e6a3ab] + Adapt v4.3.0
+  [4c555306] + ArrayLayouts v1.11.1
+  [198e06fe] + BangBang v0.4.4
+  [8e7c35d0] + BlockArrays v1.6.1
+  [5f87ffc2] + BlockTensorKit v0.1.6
+  [082447d4] + ChainRules v1.72.3
+  [d360d2e6] + ChainRulesCore v1.25.1
+  [ae650224] + ChunkSplitters v3.1.2
+  [bbf7d656] + CommonSubexpressions v0.3.1
+  [34da2185] + Compat v4.16.0
+  [a33af91c] + CompositionsBase v0.1.2
+  [187b0558] + ConstructionBase v1.5.8
+  [9a962f9c] + DataAPI v1.16.0
+  [e2d170a0] + DataValueInterfaces v1.0.0
+  [163ba53b] + DiffResults v1.1.0
+  [b552c78f] + DiffRules v1.15.1
+  [ffbed154] + DocStringExtensions v0.9.4
+  [5789e2e9] + FileIO v1.17.0
+  [1a297f60] + FillArrays v1.13.0
+  [26cc04aa] + FiniteDifferences v0.12.32
+  [f6369f11] + ForwardDiff v1.0.1
+  [46192b85] + GPUArraysCore v0.2.0
+  [f0d1745a] + HalfIntegers v1.6.0
+  [076d061b] + HashArrayMappedTries v0.2.0
+  [7869d1d1] + IRTools v0.4.14
+  [22cec73e] + InitialValues v0.3.1
+  [18e54dd8] + IntegerMathUtils v0.1.2
+  [3587e190] + InverseFunctions v0.1.17
+  [92d709cd] + IrrationalConstants v0.2.4
+  [82899510] + IteratorInterfaceExtensions v1.0.0
+  [033835bb] + JLD2 v0.5.12
+  [692b3bcd] + JLLWrappers v1.7.0
+  [0b1a1467] + KrylovKit v0.9.5
+  [8ac3fa9e] + LRUCache v1.6.2
+  [2ab3a3ac] + LogExpFunctions v0.3.29
+⌅ [e6f89c97] + LoggingExtras v1.0.3
+  [bb1c41ca] + MPSKit v0.12.6
+  [ca635005] + MPSKitModels v0.4.1
+  [1914dd2f] + MacroTools v0.5.15
+  [77ba4419] + NaNMath v1.1.3
+⌅ [67456a42] + OhMyThreads v0.7.0
+  [77e91f04] + OptimKit v0.4.0
+  [bac558e1] + OrderedCollections v1.8.0
+  [52969e89] + PEPSKit v0.5.0
+  [65ce6f38] + PackageExtensionCompat v1.0.2
+⌅ [aea7be01] + PrecompileTools v1.2.1
+  [21216c6a] + Preferences v1.4.3
+  [27ebfcd6] + Primes v0.5.7
+  [43287f4e] + PtrArrays v1.3.0
+  [308eb6b3] + RationalRoots v0.2.1
+  [c1ae055f] + RealDot v0.1.0
+  [3cdcf5f2] + RecipesBase v1.3.4
+  [ae029012] + Requires v1.3.1
+  [708f8203] + Richardson v1.4.2
+  [7e506255] + ScopedValues v1.3.0
+  [dc90abb0] + SparseInverseSubset v0.1.2
+  [276daf66] + SpecialFunctions v2.5.1
+  [91464d47] + StableTasks v0.1.7
+  [90137ffa] + StaticArrays v1.9.13
+  [1e83bf80] + StaticArraysCore v1.4.3
+  [10745b16] + Statistics v1.11.1
+  [5e0ebb24] + Strided v2.3.0
+  [4db3bf67] + StridedViews v0.4.1
+  [09ab397b] + StructArrays v0.7.1
+  [3783bdb8] + TableTraits v1.0.1
+  [bd369af6] + Tables v1.12.0
+  [ed4db957] + TaskLocalValues v0.1.2
+  [07d1fe3e] + TensorKit v0.14.5
+  [11fa318c] + TensorKitManifolds v0.7.2
+  [13a9c161] + TensorKitSectors v0.1.4
+  [6aa20fa7] + TensorOperations v5.2.0
+  [3bb67fe8] + TranscodingStreams v0.11.3
+  [9d95972d] + TupleTools v1.6.0
+  [409d34a3] + VectorInterface v0.5.0
+  [9f57e263] + WignerSymbols v2.0.0
+  [e88e6eb3] + Zygote v0.7.6
+  [700de1a5] + ZygoteRules v0.2.7
+  [efe28fd5] + OpenSpecFun_jll v0.5.6+0
+  [0dad84c5] + ArgTools v1.1.2
+  [56f22d72] + Artifacts v1.11.0
+  [2a0f44e3] + Base64 v1.11.0
+  [ade2ca70] + Dates v1.11.0
+  [8ba89e20] + Distributed v1.11.0
+  [f43a241f] + Downloads v1.6.0
+  [7b1f6079] + FileWatching v1.11.0
+  [b77e0a4c] + InteractiveUtils v1.11.0
+  [b27032c2] + LibCURL v0.6.4
+  [76f85450] + LibGit2 v1.11.0
+  [8f399da3] + Libdl v1.11.0
+  [37e2e46d] + LinearAlgebra v1.11.0
+  [56ddb016] + Logging v1.11.0
+  [d6f4376e] + Markdown v1.11.0
+  [a63ad114] + Mmap v1.11.0
+  [ca575930] + NetworkOptions v1.2.0
+  [44cfe95a] + Pkg v1.11.0
+  [de0858da] + Printf v1.11.0
+  [9a3f8284] + Random v1.11.0
+  [ea8e919c] + SHA v0.7.0
+  [9e88b42a] + Serialization v1.11.0
+  [6462fe0b] + Sockets v1.11.0
+  [2f01184e] + SparseArrays v1.11.0
+  [4607b0f0] + SuiteSparse
+  [fa267f1f] + TOML v1.0.3
+  [a4e569a6] + Tar v1.10.0
+  [cf7118a7] + UUIDs v1.11.0
+  [4ec0a83e] + Unicode v1.11.0
+  [e66e0078] + CompilerSupportLibraries_jll v1.1.1+0
+  [deac9b47] + LibCURL_jll v8.6.0+0
+  [e37daf67] + LibGit2_jll v1.7.2+0
+  [29816b5a] + LibSSH2_jll v1.11.0+1
+  [c8ffd9c3] + MbedTLS_jll v2.28.6+0
+  [14a3606d] + MozillaCACerts_jll v2023.12.12
+  [4536629a] + OpenBLAS_jll v0.3.27+1
+  [05823500] + OpenLibm_jll v0.8.1+2
+  [bea87d4a] + SuiteSparse_jll v7.7.0+0
+  [83775a58] + Zlib_jll v1.2.13+1
+  [8e850b90] + libblastrampoline_jll v5.11.0+0
+  [8e850ede] + nghttp2_jll v1.59.0+0
+  [3f19e933] + p7zip_jll v17.4.0+2
+        Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading. To see why use `status --outdated -m`
+Precompiling project...
+    464.1 ms  ✓ DataValueInterfaces
+    498.2 ms  ✓ RealDot
+    568.4 ms  ✓ TaskLocalValues
+    540.0 ms  ✓ Richardson
+    594.9 ms  ✓ StableTasks
+    627.7 ms  ✓ IntegerMathUtils
+    628.8 ms  ✓ InverseFunctions
+    682.8 ms  ✓ LRUCache
+    673.0 ms  ✓ Statistics
+    723.5 ms  ✓ OrderedCollections
+    724.0 ms  ✓ AbstractFFTs
+    741.9 ms  ✓ HalfIntegers
+    775.7 ms  ✓ DocStringExtensions
+    798.4 ms  ✓ VectorInterface
+    417.9 ms  ✓ IteratorInterfaceExtensions
+    427.1 ms  ✓ PackageExtensionCompat
+    459.8 ms  ✓ CompositionsBase
+    625.6 ms  ✓ ConstructionBase
+    624.6 ms  ✓ DataAPI
+    539.4 ms  ✓ PtrArrays
+    591.3 ms  ✓ ChunkSplitters
+    522.0 ms  ✓ RationalRoots
+   1407.1 ms  ✓ FillArrays
+    710.4 ms  ✓ StaticArraysCore
+    604.6 ms  ✓ HashArrayMappedTries
+    703.4 ms  ✓ TupleTools
+   1439.4 ms  ✓ IrrationalConstants
+    639.7 ms  ✓ NaNMath
+    753.8 ms  ✓ TranscodingStreams
+    646.3 ms  ✓ Requires
+    716.2 ms  ✓ LoggingExtras
+    737.6 ms  ✓ SuiteSparse
+    544.2 ms  ✓ LRUCache → SerializationExt
+   1259.5 ms  ✓ InitialValues
+    711.4 ms  ✓ InverseFunctions → InverseFunctionsDatesExt
+    554.8 ms  ✓ DiffResults
+    884.1 ms  ✓ Compat
+    611.4 ms  ✓ StridedViews
+    552.8 ms  ✓ ConstructionBase → ConstructionBaseLinearAlgebraExt
+    557.4 ms  ✓ CompositionsBase → CompositionsBaseInverseFunctionsExt
+    779.4 ms  ✓ Statistics → SparseArraysExt
+    965.8 ms  ✓ Primes
+    972.7 ms  ✓ Preferences
+    577.6 ms  ✓ FillArrays → FillArraysStatisticsExt
+    483.5 ms  ✓ TableTraits
+    473.3 ms  ✓ ScopedValues
+    584.4 ms  ✓ Adapt
+    519.6 ms  ✓ Compat → CompatLinearAlgebraExt
+    526.0 ms  ✓ StridedViews → StridedViewsPtrArraysExt
+    881.5 ms  ✓ FillArrays → FillArraysSparseArraysExt
+    788.8 ms  ✓ LogExpFunctions
+    784.1 ms  ✓ SparseInverseSubset
+    631.5 ms  ✓ PrecompileTools
+    768.4 ms  ✓ Strided
+    647.7 ms  ✓ JLLWrappers
+    507.6 ms  ✓ LogExpFunctions → LogExpFunctionsInverseFunctionsExt
+    706.1 ms  ✓ Adapt → AdaptSparseArraysExt
+    734.0 ms  ✓ GPUArraysCore
+   1910.7 ms  ✓ KrylovKit
+   1082.5 ms  ✓ Tables
+   2960.4 ms  ✓ MacroTools
+    790.5 ms  ✓ OpenSpecFun_jll
+    624.2 ms  ✓ CommonSubexpressions
+   1573.9 ms  ✓ ChainRulesCore
+   1939.5 ms  ✓ OptimKit
+    989.2 ms  ✓ StructArrays
+   1801.0 ms  ✓ RecipesBase
+    587.3 ms  ✓ AbstractFFTs → AbstractFFTsChainRulesCoreExt
+    896.8 ms  ✓ ChainRulesCore → ChainRulesCoreSparseArraysExt
+    897.6 ms  ✓ KrylovKit → KrylovKitChainRulesCoreExt
+    934.8 ms  ✓ ZygoteRules
+    664.9 ms  ✓ StructArrays → StructArraysAdaptExt
+   3040.2 ms  ✓ WignerSymbols
+    629.1 ms  ✓ StructArrays → StructArraysLinearAlgebraExt
+    827.8 ms  ✓ StructArrays → StructArraysSparseArraysExt
+   2114.4 ms  ✓ IRTools
+   1934.1 ms  ✓ LogExpFunctions → LogExpFunctionsChainRulesCoreExt
+   2622.3 ms  ✓ Accessors
+    631.7 ms  ✓ Accessors → StructArraysExt
+    681.4 ms  ✓ Accessors → LinearAlgebraExt
+   5021.0 ms  ✓ FileIO
+   3497.5 ms  ✓ SpecialFunctions
+    935.7 ms  ✓ BangBang
+    805.4 ms  ✓ DiffRules
+    629.2 ms  ✓ BangBang → BangBangStructArraysExt
+    689.8 ms  ✓ BangBang → BangBangChainRulesCoreExt
+    695.4 ms  ✓ BangBang → BangBangTablesExt
+   1213.7 ms  ✓ OhMyThreads
+   2068.7 ms  ✓ SpecialFunctions → SpecialFunctionsChainRulesCoreExt
+   8264.4 ms  ✓ StaticArrays
+   6256.7 ms  ✓ ChainRules
+    741.9 ms  ✓ StaticArrays → StaticArraysChainRulesCoreExt
+    741.9 ms  ✓ ConstructionBase → ConstructionBaseStaticArraysExt
+    763.1 ms  ✓ Adapt → AdaptStaticArraysExt
+    792.2 ms  ✓ StaticArrays → StaticArraysStatisticsExt
+    803.0 ms  ✓ Accessors → StaticArraysExt
+    803.3 ms  ✓ BangBang → BangBangStaticArraysExt
+    867.6 ms  ✓ StructArrays → StructArraysStaticArraysExt
+   4280.9 ms  ✓ ForwardDiff
+   1355.0 ms  ✓ FiniteDifferences
+    971.4 ms  ✓ ForwardDiff → ForwardDiffStaticArraysExt
+  14648.3 ms  ✓ ArrayLayouts
+    871.5 ms  ✓ ArrayLayouts → ArrayLayoutsSparseArraysExt
+   1765.4 ms  ✓ BlockArrays
+    920.6 ms  ✓ BlockArrays → BlockArraysAdaptExt
+  34799.1 ms  ✓ JLD2
+  30621.1 ms  ✓ Zygote
+ 125943.1 ms  ✓ TensorOperations
+   1568.5 ms  ✓ TensorOperations → TensorOperationsChainRulesCoreExt
+   7251.5 ms  ✓ TensorKitSectors
+   7875.9 ms  ✓ TensorKit
+   1849.0 ms  ✓ TensorKitManifolds
+   2192.3 ms  ✓ TensorKit → TensorKitFiniteDifferencesExt
+   2437.6 ms  ✓ TensorKit → TensorKitChainRulesCoreExt
+   2644.9 ms  ✓ BlockTensorKit
+  15979.7 ms  ✓ MPSKit
+  13410.2 ms  ✓ MPSKitModels
+  15017.1 ms  ✓ PEPSKit
+  118 dependencies successfully precompiled in 191 seconds. 31 already precompiled.
+[ Info: CTMRG init:	obj = +4.299846720149e+00	err = 1.0000e+00
+[ Info: CTMRG conv 4:	obj = +4.299846720149e+00	err = 2.7964769338e-11	time = 1.66 min
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5274180160990514)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 1.0613844761969538e-5)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.527414716921236)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: initializing with f = -2.110438342588, ‖∇f‖ = 9.1984e-04
+[ Info: CTMRG init:	obj = +4.298355972570e+00	err = 1.0000e+00
+[ Info: CTMRG conv 20:	obj = +4.298357261768e+00	err = 8.7335748708e-10	time = 8.23 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5266406254048894)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5266406253793972)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter    1, time 1403.12 s: f = -2.110440619070, ‖∇f‖ = 2.2886e-03, α = 1.00e+00, m = 0, nfg = 1
+[ Info: CTMRG init:	obj = +4.297867184412e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.297867468301e+00	err = 9.5110392606e-10	time = 7.15 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5271253453928333)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5271253453038899)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter    2, time 1417.58 s: f = -2.110444370916, ‖∇f‖ = 8.0751e-04, α = 1.00e+00, m = 1, nfg = 1
+[ Info: CTMRG init:	obj = +4.297530352142e+00	err = 1.0000e+00
+[ Info: CTMRG conv 20:	obj = +4.297530644076e+00	err = 3.3322767358e-10	time = 6.91 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5270295580862279)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5270295580865381)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter    3, time 1430.90 s: f = -2.110445457175, ‖∇f‖ = 5.8256e-04, α = 1.00e+00, m = 2, nfg = 1
+[ Info: CTMRG init:	obj = +4.296790594971e+00	err = 1.0000e+00
+[ Info: CTMRG conv 20:	obj = +4.296790832751e+00	err = 6.0631410508e-10	time = 6.93 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5269618882736656)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5269618882441467)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter    4, time 1443.54 s: f = -2.110446519908, ‖∇f‖ = 7.1788e-04, α = 1.00e+00, m = 3, nfg = 1
+[ Info: CTMRG init:	obj = +4.294781464579e+00	err = 1.0000e+00
+[ Info: CTMRG conv 21:	obj = +4.294784414795e+00	err = 6.4641172535e-10	time = 8.09 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5265587737174594)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5265587737403192)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter    5, time 1457.15 s: f = -2.110449568475, ‖∇f‖ = 1.1900e-03, α = 1.00e+00, m = 4, nfg = 1
+[ Info: CTMRG init:	obj = +4.290900689964e+00	err = 1.0000e+00
+[ Info: CTMRG conv 22:	obj = +4.290906612439e+00	err = 3.4780396108e-10	time = 8.18 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5266123277912842)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5266123278124638)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter    6, time 1471.54 s: f = -2.110452696122, ‖∇f‖ = 1.1420e-03, α = 1.00e+00, m = 5, nfg = 1
+[ Info: CTMRG init:	obj = +4.288571815221e+00	err = 1.0000e+00
+[ Info: CTMRG conv 21:	obj = +4.288574709050e+00	err = 7.6577280070e-10	time = 9.11 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5263076685763257)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5263076686483081)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter    7, time 1486.96 s: f = -2.110455818435, ‖∇f‖ = 7.7892e-04, α = 1.00e+00, m = 6, nfg = 1
+[ Info: CTMRG init:	obj = +4.285501539021e+00	err = 1.0000e+00
+[ Info: CTMRG conv 21:	obj = +4.285506203040e+00	err = 9.7620585320e-10	time = 8.85 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260062201994742)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260062201703668)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter    8, time 1502.12 s: f = -2.110458949273, ‖∇f‖ = 8.2417e-04, α = 1.00e+00, m = 7, nfg = 1
+[ Info: CTMRG init:	obj = +4.284465906099e+00	err = 1.0000e+00
+[ Info: CTMRG conv 21:	obj = +4.284467433229e+00	err = 3.7684350059e-10	time = 9.49 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5262587132074552)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5262587132069639)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter    9, time 1517.77 s: f = -2.110459278578, ‖∇f‖ = 1.1396e-03, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.285190458911e+00	err = 1.0000e+00
+[ Info: CTMRG conv 20:	obj = +4.285190812249e+00	err = 7.0719030465e-10	time = 8.51 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261423427333989)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261423428497634)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   10, time 1531.88 s: f = -2.110460210517, ‖∇f‖ = 3.4547e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.285400103989e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.285400122833e+00	err = 5.2779023829e-10	time = 9.04 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261294894804911)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261294894881325)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   11, time 1547.23 s: f = -2.110460408353, ‖∇f‖ = 2.4268e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.285666503681e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.285666539805e+00	err = 5.0920157763e-10	time = 9.64 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261062049882395)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261062049444474)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   12, time 1562.60 s: f = -2.110460733423, ‖∇f‖ = 3.3587e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.286066123762e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.286066169961e+00	err = 6.0492486097e-10	time = 8.74 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260828086484147)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260828087447074)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   13, time 1576.60 s: f = -2.110461203540, ‖∇f‖ = 4.4600e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.286586545564e+00	err = 1.0000e+00
+[ Info: CTMRG conv 17:	obj = +4.286587204712e+00	err = 4.4764621149e-10	time = 8.06 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261250162515603)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261250163574602)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   14, time 1589.50 s: f = -2.110462232635, ‖∇f‖ = 8.2885e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.288620239586e+00	err = 1.0000e+00
+[ Info: CTMRG conv 21:	obj = +4.288620537820e+00	err = 3.7549101685e-10	time = 10.09 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260194766312043)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260194766459891)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   15, time 1604.72 s: f = -2.110463579962, ‖∇f‖ = 6.3015e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.289574218340e+00	err = 1.0000e+00
+[ Info: CTMRG conv 20:	obj = +4.289574632123e+00	err = 4.4618913925e-10	time = 10.50 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.526235956723125)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.526235956743081)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   16, time 1621.00 s: f = -2.110464940067, ‖∇f‖ = 5.3229e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.291787027047e+00	err = 1.0000e+00
+[ Info: CTMRG conv 21:	obj = +4.291788472863e+00	err = 3.2650487700e-10	time = 11.75 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.525919401225484)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5259194012843803)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   17, time 1638.27 s: f = -2.110466000564, ‖∇f‖ = 9.7512e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.291764953311e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.291765784484e+00	err = 6.2804199787e-10	time = 10.45 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5262086067151533)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.526208606895379)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   18, time 1654.26 s: f = -2.110466812547, ‖∇f‖ = 5.2933e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.291816864348e+00	err = 1.0000e+00
+[ Info: CTMRG conv 18:	obj = +4.291816883837e+00	err = 7.6550557661e-10	time = 10.22 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261706995794728)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261706997900009)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   19, time 1669.35 s: f = -2.110467142636, ‖∇f‖ = 3.9115e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.292767836931e+00	err = 1.0000e+00
+[ Info: CTMRG conv 20:	obj = +4.292768001112e+00	err = 6.9082682877e-10	time = 11.56 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260833530087379)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260833534049982)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   20, time 1686.14 s: f = -2.110467844680, ‖∇f‖ = 2.7250e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.293475520526e+00	err = 1.0000e+00
+[ Info: CTMRG conv 20:	obj = +4.293475566912e+00	err = 4.1922248035e-10	time = 12.67 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260452417858508)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260452417722936)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   21, time 1705.35 s: f = -2.110468247401, ‖∇f‖ = 2.6497e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.294168608888e+00	err = 1.0000e+00
+[ Info: CTMRG conv 20:	obj = +4.294168737079e+00	err = 4.6302475419e-10	time = 12.63 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5259911440710169)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.525991144094753)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   22, time 1722.98 s: f = -2.110468532531, ‖∇f‖ = 3.9811e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.294576671998e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.294576795265e+00	err = 6.5519226010e-10	time = 12.11 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260408227190954)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260408226955231)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   23, time 1741.37 s: f = -2.110468822315, ‖∇f‖ = 1.9091e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.294445362764e+00	err = 1.0000e+00
+[ Info: CTMRG conv 18:	obj = +4.294445372400e+00	err = 4.6548165798e-10	time = 13.71 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260742160096518)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260742159950007)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   24, time 1762.33 s: f = -2.110468986950, ‖∇f‖ = 1.9003e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.294248160519e+00	err = 1.0000e+00
+[ Info: CTMRG conv 18:	obj = +4.294248237897e+00	err = 3.6036408450e-10	time = 12.57 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5262861924576441)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5262861925257358)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   25, time 1780.24 s: f = -2.110469521926, ‖∇f‖ = 3.2063e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.294427836198e+00	err = 1.0000e+00
+[ Info: CTMRG conv 20:	obj = +4.294428216887e+00	err = 3.9864683737e-10	time = 13.76 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5259493672894959)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5259493672746954)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: CTMRG init:	obj = +4.294352717290e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.294352831077e+00	err = 6.8463222176e-10	time = 13.32 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261020733504591)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261020733237984)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   26, time 1819.16 s: f = -2.110469806671, ‖∇f‖ = 4.6342e-04, α = 5.47e-01, m = 8, nfg = 2
+[ Info: CTMRG init:	obj = +4.294526081405e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.294526141232e+00	err = 7.3898633739e-10	time = 13.81 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.526160212441872)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261602126135339)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   27, time 1838.50 s: f = -2.110470127864, ‖∇f‖ = 3.4468e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.295024505794e+00	err = 1.0000e+00
+[ Info: CTMRG conv 20:	obj = +4.295025015964e+00	err = 5.2869142053e-10	time = 15.20 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261000662054749)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261000662167199)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   28, time 1859.50 s: f = -2.110470547305, ‖∇f‖ = 4.0277e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.294994743530e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.294995021883e+00	err = 6.5996417069e-10	time = 15.25 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.526220948186196)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.526220948329116)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   29, time 1881.37 s: f = -2.110470765938, ‖∇f‖ = 3.2030e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.294899441155e+00	err = 1.0000e+00
+[ Info: CTMRG conv 18:	obj = +4.294899450201e+00	err = 4.5312394182e-10	time = 13.52 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5262011257243953)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5262011258305814)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   30, time 1900.82 s: f = -2.110470927853, ‖∇f‖ = 2.3983e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.294329324066e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.294329432677e+00	err = 6.4688545629e-10	time = 14.45 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261625024513422)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261625024851297)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   31, time 1920.45 s: f = -2.110471317126, ‖∇f‖ = 1.8688e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.293863990631e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.293864045152e+00	err = 5.7992475811e-10	time = 15.02 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5260686531202784)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.526068653117187)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   32, time 1941.12 s: f = -2.110471491676, ‖∇f‖ = 2.8491e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.293225912965e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.293225953479e+00	err = 7.2954589088e-10	time = 17.04 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261006417137335)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261006418007392)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   33, time 1963.69 s: f = -2.110471711763, ‖∇f‖ = 1.8642e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.292738922314e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.292738953895e+00	err = 6.0612417841e-10	time = 15.19 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261704740762907)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261704741311509)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   34, time 1984.21 s: f = -2.110471913061, ‖∇f‖ = 1.7936e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.291647140212e+00	err = 1.0000e+00
+[ Info: CTMRG conv 20:	obj = +4.291647235211e+00	err = 6.0612673987e-10	time = 15.91 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261205224391565)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261205224669419)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   35, time 2005.13 s: f = -2.110472247124, ‖∇f‖ = 2.8808e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.290517182291e+00	err = 1.0000e+00
+[ Info: CTMRG conv 20:	obj = +4.290517339758e+00	err = 7.8268222224e-10	time = 15.33 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5263550876982842)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5263550876219099)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   36, time 2026.60 s: f = -2.110472442409, ‖∇f‖ = 3.4296e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.290303141827e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.290303154340e+00	err = 5.2596745215e-10	time = 15.86 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261997751491463)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261997751532757)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   37, time 2047.70 s: f = -2.110472563258, ‖∇f‖ = 1.9841e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.290293359566e+00	err = 1.0000e+00
+[ Info: CTMRG conv 18:	obj = +4.290293368686e+00	err = 6.4844362605e-10	time = 14.29 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261665832837934)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261665832804792)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: iter   38, time 2067.46 s: f = -2.110472615100, ‖∇f‖ = 1.2181e-04, α = 1.00e+00, m = 8, nfg = 1
+[ Info: CTMRG init:	obj = +4.289914680635e+00	err = 1.0000e+00
+[ Info: CTMRG conv 19:	obj = +4.289914704478e+00	err = 9.0374365124e-10	time = 16.45 sec
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.5261463718446828)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+┌ Warning: `svd` cotangents sensitive to gauge choice: (|Δgauge| = 0.526146371864364)
+└ @ TensorKitChainRulesCoreExt ~/.julia/packages/TensorKit/esxcj/ext/TensorKitChainRulesCoreExt/factorizations.jl:254
+[ Info: LBFGS: converged after 39 iterations and time 2089.89 s: f = -2.110472670022, ‖∇f‖ = 8.5033e-05

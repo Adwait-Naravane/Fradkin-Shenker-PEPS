@@ -1,0 +1,32 @@
+ERROR: LoadError: ArgumentError: Package TensorKit [07d1fe3e-3e46-537d-9eac-e9e13d0d4cec] is required but does not seem to be installed:
+ - Run `Pkg.instantiate()` to install all recorded dependencies.
+
+Stacktrace:
+  [1] _require(pkg::Base.PkgId, env::String)
+    @ Base ./loading.jl:2515
+  [2] __require_prelocked(uuidkey::Base.PkgId, env::String)
+    @ Base ./loading.jl:2388
+  [3] #invoke_in_world#3
+    @ ./essentials.jl:1089 [inlined]
+  [4] invoke_in_world
+    @ ./essentials.jl:1086 [inlined]
+  [5] _require_prelocked(uuidkey::Base.PkgId, env::String)
+    @ Base ./loading.jl:2375
+  [6] macro expansion
+    @ ./loading.jl:2314 [inlined]
+  [7] macro expansion
+    @ ./lock.jl:273 [inlined]
+  [8] __require(into::Module, mod::Symbol)
+    @ Base ./loading.jl:2271
+  [9] #invoke_in_world#3
+    @ ./essentials.jl:1089 [inlined]
+ [10] invoke_in_world
+    @ ./essentials.jl:1086 [inlined]
+ [11] require(into::Module, mod::Symbol)
+    @ Base ./loading.jl:2260
+ [12] include(fname::String)
+    @ Main ./sysimg.jl:38
+ [13] top-level scope
+    @ /var/lib/condor/execute/dir_929437/tests.jl:1
+in expression starting at /var/lib/condor/execute/dir_929437/new_toolbox.jl:2
+in expression starting at /var/lib/condor/execute/dir_929437/tests.jl:1
