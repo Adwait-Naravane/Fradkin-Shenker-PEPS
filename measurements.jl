@@ -21,7 +21,6 @@ folder = "Saved_content"
 files = glob("final_Psi_trivial_1e4*_hx=*_hz=*_χ=*_D=*.jld2", folder)
 
 results = DataFrame(
-    file = String[],
     hx = Float64[],
     hz = Float64[],
     chi = Int[],
@@ -67,7 +66,7 @@ for file in files
         infinite_Wilson = vals_Wilson[1] / vals_Wilson_trivial[1]
 
         # Append to results
-        push!(results, (filename, hx, hz, chi, D, E, ξv..., ξh..., infinite_tHooft, infinite_Wilson))
+        push!(results, (hx, hz, chi, D, E, ξv..., ξh..., infinite_tHooft, infinite_Wilson))
 
     catch e
         @warn "Skipping $file due to error" exception = e

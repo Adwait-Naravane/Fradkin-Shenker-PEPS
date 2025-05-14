@@ -745,13 +745,13 @@ function strings_CTMRG(Ψ::InfinitePEPS, env::CTMRGEnv)
     GZ = TensorMap(ComplexF64[1.0 0.0; 0.0 -1.0], PB ← PB)
 
     #Infinite THooft strings
-    vals_tHooft_trivial, vecs_tHooft_trivial, info = 
+    vals_tHooft_trivial, vecs_tHooft_trivial, info =
         eigsolve(TensorMap(randn, scalartype(N_B), space(N_B, 1) ⊗ VB_west' ⊗ VB_west ← space(N_B, 1)), 1, :LM) do v
 
             @tensor opt = true vout[-4 -1 -2; -3] :=
                 N_B[1 2 3; -3] * S_B[-4 4 5; 6] * Ψ[2, 1][9; 2 -1 4 7] * conj(Ψ[2, 1][9; 3 -2 5 8]) * v[6 7 8; 1]
 
-    end
+        end
 
     vals_tHooft, vecs_tHooft, info =
         eigsolve(TensorMap(randn, scalartype(N_B), space(N_B, 1) ⊗ VB_west' ⊗ VB_west ← space(N_B, 1)), 1, :LM) do v
@@ -762,19 +762,19 @@ function strings_CTMRG(Ψ::InfinitePEPS, env::CTMRGEnv)
         end
 
 
-    VB_North = space(Ψ[1,2],5)
-    N_A = env.edges[1,2,1]
-    S_A = env.edges[3,2,1]
+    VB_North = space(Ψ[1, 2], 5)
+    N_A = env.edges[1, 2, 1]
+    S_A = env.edges[3, 2, 1]
     #Infinite Wilson strings
     vals_Wilson_trivial, vecs_Wilson_trivial, info =
-    eigsolve(TensorMap(randn, scalartype(N_A), space(N_A, 1) ⊗ VB_North' ⊗ VB_North ← space(N_A, 1)), 1, :LM) do v
+        eigsolve(TensorMap(randn, scalartype(N_A), space(N_A, 1) ⊗ VB_North' ⊗ VB_North ← space(N_A, 1)), 1, :LM) do v
 
-        @tensor opt = true vout[-4 -1 -2; -3] :=
-            env.edges[1,2,1][1 2 3; -3] * env.edges[1,2,2][7 8 9; 1] *
-            env.edges[3,2,1][-4 4 5; 6] * env.edges[3,2,2][6 10 11; 12] *
-            Ψ[1,1][13; 2 -1 4 14] * conj(Ψ[1,1][13; 3 -2 5 15]) *
-            Ψ[1,2][18; 8 14 10 16] * conj(Ψ[1,2][18; 9 15 11 17]) *
-            v[12 16 17; 7]
+            @tensor opt = true vout[-4 -1 -2; -3] :=
+                env.edges[1, 2, 1][1 2 3; -3] * env.edges[1, 2, 2][7 8 9; 1] *
+                env.edges[3, 2, 1][-4 4 5; 6] * env.edges[3, 2, 2][6 10 11; 12] *
+                Ψ[1, 1][13; 2 -1 4 14] * conj(Ψ[1, 1][13; 3 -2 5 15]) *
+                Ψ[1, 2][18; 8 14 10 16] * conj(Ψ[1, 2][18; 9 15 11 17]) *
+                v[12 16 17; 7]
 
         end
 
@@ -783,10 +783,10 @@ function strings_CTMRG(Ψ::InfinitePEPS, env::CTMRGEnv)
         eigsolve(TensorMap(randn, scalartype(N_A), space(N_A, 1) ⊗ VB_North' ⊗ VB_North ⊗ Z2Space(1 => 1) ← space(N_A, 1)), 1, :LM) do v
 
             @tensor opt = true vout[-4 -1 -2 -5; -3] :=
-                env.edges[1,2,1][1 2 3; -3] * env.edges[1,2,2][7 8 9; 1] *
-                env.edges[3,2,1][-4 4 5; 6] * env.edges[3,2,2][6 10 11; 12] *
-                Ψ[1,1][13; 2 -1 4 14] * conj(Ψ[1,1][13; 3 -2 5 15]) *
-                Ψ[1,2][18; 8 14 10 16] * conj(Ψ[1,2][19; 9 15 11 17]) * GX[19; 18] *
+                env.edges[1, 2, 1][1 2 3; -3] * env.edges[1, 2, 2][7 8 9; 1] *
+                env.edges[3, 2, 1][-4 4 5; 6] * env.edges[3, 2, 2][6 10 11; 12] *
+                Ψ[1, 1][13; 2 -1 4 14] * conj(Ψ[1, 1][13; 3 -2 5 15]) *
+                Ψ[1, 2][18; 8 14 10 16] * conj(Ψ[1, 2][19; 9 15 11 17]) * GX[19; 18] *
                 v[12 16 17 -5; 7]
 
         end
