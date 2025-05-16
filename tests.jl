@@ -24,13 +24,23 @@ symm = Z2Irrep
 
 H = Fradkin_Shenker(InfiniteSquare(2, 2); Jx=1, Jz=1, hx=hx, hz=hz, pdim=2, vdim=4);
 
+
+# file = jldopen("final_Psi_trivial_hx=$(hx)_hz=$(hz)_χ=$(χ)_D=$(D).jld2", "r")
+# Ψ = file["Ψ"]
+# env = file["env"]
+# E = file["E"]
+# convhistory = file["convhistory"]
+# close(file)
+
+
+
 PA = Z2Space(0 => p, 1 => p)
 V = Z2Space(0 => v, 1 => v)
 A = TensorMap(randn, ComplexF64, PA ← V ⊗ V ⊗ V' ⊗ V');
-# Be = exp.(1im*diag(rand(Float64,v,v)));
-# Bo = exp.(1im*diag(rand(Float64,v,v)));
-Be = diag(rand(Float64, v, v));
-Bo = diag(rand(Float64, v, v));
+# # Be = exp.(1im*diag(rand(Float64,v,v)));
+# # Bo = exp.(1im*diag(rand(Float64,v,v)));
+# Be = diag(rand(Float64, v, v));
+# Bo = diag(rand(Float64, v, v));
 
 #Ψ = peps_Gauge(A, Be, Bo);
 Ψ = peps_Gauge_trivial(A);
@@ -39,12 +49,16 @@ A = Ψ[1, 1];
 ctm_alg = SequentialCTMRG(; tol=1e-9, verbosity=2)
 env_init = CTMRGEnv(Ψ, Z2Space(0 => χ));
 env_init = new_leading_boundary(env_init, Ψ, ctm_alg);
-
+#env_init = env
 
 
 opt_alg = PEPSOptimize(;
     boundary_alg=ctm_alg,
+<<<<<<< HEAD
     optimizer_alg=LBFGS(8; gradtol=1e-4, verbosity=4),
+=======
+    optimizer_alg=LBFGS(8; gradtol=1e-4, maxiter = 400, verbosity=4),
+>>>>>>> main
     gradient_alg=LinSolver(; iterscheme=:diffgauge),
 )
 
@@ -135,7 +149,7 @@ end
 #new_Ψ = peps_Gauge(A, Be, Bo);
 new_Ψ = peps_Gauge_trivial(A);
 
-file = jldopen("final_Psi_trivial_hx=$(hx)_hz=$(hz)_χ=$(χ)_D=$(D).jld2", "w")
+file = jldopen("final_Psi_trivial_1e4_hx=$(hx)_hz=$(hz)_χ=$(χ)_D=$(D).jld2", "w")
 file["Ψ"] = new_Ψ
 file["env"] = env
 file["E"] = E

@@ -1,0 +1,9 @@
+# Ignore Condor output logs
+condor_logs/
+
+# Ignore saved tensor network data
+Saved_content/
+
+*.jld2
+*.err
+*.out

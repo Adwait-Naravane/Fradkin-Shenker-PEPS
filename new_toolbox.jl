@@ -668,3 +668,152 @@ function update!(env::CTMRGEnv{C,T}, env´::CTMRGEnv{C,T}) where {C,T}
     return env
 end
 reuse_env = true
+
+
+
+
+#Measurements
+
+function tHooftstring_basic(Ψ::InfinitePEPS, env::CTMRGEnv)
+    PB = Z2Space(0 => 2)
+    GZ = TensorMap(ComplexF64[1.0 0.0; 0.0 -1.0], PB ← PB)
+    cake = adjoint(Ψ[2, 1]) * GZ * Ψ[2, 1]
+
+    PEPSKit.@autoopt @tensor tHooft[χ_NW D_W1 D_W2 χ_SW; χ_NE D_E1 D_E2 χ_SE] := env.edges[1, 1, 1][χ_NW D_NS1 D_NS2; χ_NE] * cake[D_NS2 D_E2 D_SN2 D_W2; D_NS1 D_E1 D_SN1 D_W1] * env.edges[3, 1, 1][χ_SE D_SN1 D_SN2; χ_SW]
+    return tHooft
+end
+function PEPS_transfer_thooft(Ψ::InfinitePEPS, env::CTMRGEnv)
+
+    cake = adjoint(Ψ[2, 1]) * Ψ[2, 1]
+
+    PEPSKit.@autoopt @tensor transfer_peps[χ_NW D_W1 D_W2 χ_SW; χ_NE D_E1 D_E2 χ_SE] := env.edges[1, 1, 1][χ_NW D_NS1 D_NS2; χ_NE] * cake[D_NS2 D_E2 D_SN2 D_W2; D_NS1 D_E1 D_SN1 D_W1] * env.edges[3, 1, 1][χ_SE D_SN1 D_SN2; χ_SW]
+
+    return transfer_peps
+end
+
+function Wilson_basic(Ψ::InfinitePEPS, env::CTMRGEnv)
+    PB = Z2Space(0 => 2)
+    GX = TensorMap(ComplexF64[0.0 1.0; 1.0 0.0], PB ← PB)
+    B_cake = adjoint(Ψ[2, 1]) * GX * Ψ[2, 1]
+    A_cake = adjoint(Ψ[1, 1]) * Ψ[1, 1]
+
+    PEPSKit.@autoopt @tensor Wilson[χ_WSB D_BS1 D_BS2 χ_ESB; χ_WNA D_AN1 D_AN2 χ_ENA] := env.edges[4, 2, 2][χ_WSB D_BW1 D_BW2; χ_WNB] * env.edges[4, 1, 2][χ_WNB D_AW1 D_AW2; χ_WNA] * env.edges[2, 1, 2][χ_ENA D_AE1 D_AE2; χ_ENB] * env.edges[2, 2, 2][χ_ENB D_BE1 D_BE2; χ_ESB] * A_cake[D_AN2 D_AE2 D_AS2 D_AW2; D_AN1 D_AE1 D_AS1 D_AW1] * B_cake[D_AS2 D_BE2 D_BS2 D_BW2; D_AS1 D_BE1 D_BS1 D_BW1]
+
+    return Wilson
+end
+
+function PEPS_transfer_wilson(Ψ::InfinitePEPS, env::CTMRGEnv)
+
+    B_cake = adjoint(Ψ[2, 1]) * Ψ[2, 1]
+    A_cake = adjoint(Ψ[1, 1]) * Ψ[1, 1]
+
+    PEPSKit.@autoopt @tensor transfer_peps[χ_WSB D_BS1 D_BS2 χ_ESB; χ_WNA D_AN1 D_AN2 χ_ENA] := env.edges[4, 2, 2][χ_WSB D_BW1 D_BW2; χ_WNB] * env.edges[4, 1, 2][χ_WNB D_AW1 D_AW2; χ_WNA] * env.edges[2, 1, 2][χ_ENA D_AE1 D_AE2; χ_ENB] * env.edges[2, 2, 2][χ_ENB D_BE1 D_BE2; χ_ESB] * A_cake[D_AN2 D_AE2 D_AS2 D_AW2; D_AN1 D_AE1 D_AS1 D_AW1] * B_cake[D_AS2 D_BE2 D_BS2 D_BW2; D_AS1 D_BE1 D_BS1 D_BW1]
+    return transfer_peps
+end
+
+
+function ordered_eigenvalues(A::TensorMap)
+    D1, _ = eig(A)
+    data1 = zeros(ComplexF64, dim(space(D1, 1)))
+
+    i = 1
+    for (_, b) in blocks(D1)
+        for I in LinearAlgebra.diagind(b)
+            data1[i] = b[I]
+            i += 1
+        end
+    end
+
+    data1 = sort(data1; by=x -> abs(x), rev=true) # sorting by magnitude
+    data1 = filter(x -> real(x) > 0, data1) # filtering out negative real values
+    data1 = filter(x -> abs(x) > 1e-12, data1)
+
+    data1 = real.(data1)
+
+    return data1
+end
+function _dag(A::MPSKit.GenericMPSTensor{S,N}) where {S,N}
+    return permute(A', ((1, (3:(N + 1))...), (2,)))
+end
+
+function correlation_length_gauge(env::CTMRGEnv)
+    #horizontal
+    above_horizontal = InfiniteMPS([env.edges[1,2,1], env.edges[1,2,2]])
+    below_horizontal = InfiniteMPS(_dag.(env.edges[3,1,1], env.edges[3,1,2]))
+    val = MPSKit.transfer_spectrum(above_horizontal; below_horizontal)
+    val = val/abs(val[1])
+    ξh = -1/log(abs(val[2]))
+
+    #vertical
+    above_vertical = InfiniteMPS([env.edges[2,1,1], env.edges[2,2,1]])
+    below_vertical = InfiniteMPS(_dag.(env.edges[4,1,2], env.edges[4,2,2]))
+    val = MPSKit.transfer_spectrum(above_vertical; below_vertical)
+    val = val/abs(val[1])
+    ξv = -1/log(abs(val[2]))
+
+    return ξh, ξv
+
+end
+
+function strings_CTMRG(Ψ::InfinitePEPS, env::CTMRGEnv)
+
+    VB_west = space(Ψ[2, 1], 5)
+    N_B = env.edges[1, 1, 1]
+    S_B = env.edges[3, 1, 1]
+
+    PB = Z2Space(0 => 2)
+    GX = TensorMap(ComplexF64[0.0 1.0; 1.0 0.0], PB ← PB)
+    GZ = TensorMap(ComplexF64[1.0 0.0; 0.0 -1.0], PB ← PB)
+
+    #correlation_length
+
+
+    #Infinite THooft strings
+    vals_tHooft_trivial, vecs_tHooft_trivial, info =
+        eigsolve(TensorMap(randn, scalartype(N_B), space(N_B, 1) ⊗ VB_west' ⊗ VB_west ← space(N_B, 1)), 1, :LM) do v
+
+            @tensor opt = true vout[-4 -1 -2; -3] :=
+                N_B[1 2 3; -3] * S_B[-4 4 5; 6] * Ψ[2, 1][9; 2 -1 4 7] * conj(Ψ[2, 1][9; 3 -2 5 8]) * v[6 7 8; 1]
+
+        end
+
+    vals_tHooft, vecs_tHooft, info =
+        eigsolve(TensorMap(randn, scalartype(N_B), space(N_B, 1) ⊗ VB_west' ⊗ VB_west ← space(N_B, 1)), 1, :LM) do v
+
+            @tensor opt = true vout[-4 -1 -2; -3] :=
+                N_B[1 2 3; -3] * S_B[-4 4 5; 6] * Ψ[2, 1][9; 2 -1 4 7] * GZ[10; 9] * conj(Ψ[2, 1][10; 3 -2 5 8]) * v[6 7 8; 1]
+
+        end
+
+
+    VB_North = space(Ψ[1, 2], 5)
+    N_A = env.edges[1, 2, 1]
+    S_A = env.edges[3, 2, 1]
+    #Infinite Wilson strings
+    vals_Wilson_trivial, vecs_Wilson_trivial, info =
+        eigsolve(TensorMap(randn, scalartype(N_A), space(N_A, 1) ⊗ VB_North' ⊗ VB_North ← space(N_A, 1)), 1, :LM) do v
+
+            @tensor opt = true vout[-4 -1 -2; -3] :=
+                env.edges[1, 2, 1][1 2 3; -3] * env.edges[1, 2, 2][7 8 9; 1] *
+                env.edges[3, 2, 1][-4 4 5; 6] * env.edges[3, 2, 2][6 10 11; 12] *
+                Ψ[1, 1][13; 2 -1 4 14] * conj(Ψ[1, 1][13; 3 -2 5 15]) *
+                Ψ[1, 2][18; 8 14 10 16] * conj(Ψ[1, 2][18; 9 15 11 17]) *
+                v[12 16 17; 7]
+
+        end
+
+
+    vals_Wilson, vecs_wilson, info =
+        eigsolve(TensorMap(randn, scalartype(N_A), space(N_A, 1) ⊗ VB_North' ⊗ VB_North ⊗ Z2Space(1 => 1) ← space(N_A, 1)), 1, :LM) do v
+
+            @tensor opt = true vout[-4 -1 -2 -5; -3] :=
+                env.edges[1, 2, 1][1 2 3; -3] * env.edges[1, 2, 2][7 8 9; 1] *
+                env.edges[3, 2, 1][-4 4 5; 6] * env.edges[3, 2, 2][6 10 11; 12] *
+                Ψ[1, 1][13; 2 -1 4 14] * conj(Ψ[1, 1][13; 3 -2 5 15]) *
+                Ψ[1, 2][18; 8 14 10 16] * conj(Ψ[1, 2][19; 9 15 11 17]) * GX[19; 18] *
+                v[12 16 17 -5; 7]
+
+        end
+
+    return vals_tHooft_trivial, vals_tHooft, vals_Wilson_trivial, vals_Wilson
+end
