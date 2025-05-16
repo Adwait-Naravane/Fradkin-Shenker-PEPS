@@ -21,15 +21,15 @@ folder = "Saved_content"
 files = glob("final_Psi_trivial_1e4*_hx=*_hz=*_χ=*_D=*.jld2", folder)
 
 results = DataFrame(
-    hx = Float64[],
-    hz = Float64[],
-    chi = Int[],
-    D = Int[],
-    E = [],
-    ξv = Float64[],
-    ξh = Float64[],
-    infinite_tHooft = ComplexF64[],
-    infinite_Wilson = ComplexF64[]
+    hx=Float64[],
+    hz=Float64[],
+    chi=Int[],
+    D=Int[],
+    E=[],
+    ξv=Float64[],
+    ξh=Float64[],
+    infinite_tHooft=ComplexF64[],
+    infinite_Wilson=ComplexF64[]
 )
 
 for file in files
@@ -57,16 +57,16 @@ for file in files
         close(f)
 
         # Compute quantities
-        Z = partition_function_peps(Ψ)
-        env_Z = get_new_environment_Z(env, Ψ)
-        ξv, ξh,  = correlation_length(Z, env_Z)
+        # Z = partition_function_peps(Ψ)
+        # env_Z = get_new_environment_Z(env, Ψ)
+        ξv, ξh = correlation_length(Ψ, env)
 
         vals_tHooft_trivial, vals_tHooft, vals_Wilson_trivial, vals_Wilson = strings_CTMRG(Ψ, env)
         infinite_tHooft = vals_tHooft[1] / vals_tHooft_trivial[1]
         infinite_Wilson = vals_Wilson[1] / vals_Wilson_trivial[1]
-
+        @show infinite_tHooft
         # Append to results
-        push!(results, (hx, hz, chi, D, E, ξv..., ξh..., infinite_tHooft, infinite_Wilson))
+        push!(results, (hx, hz, chi, D, E, ξv[1], ξh[1], infinite_tHooft, infinite_Wilson))
 
     catch e
         @warn "Skipping $file due to error" exception = e
@@ -74,7 +74,7 @@ for file in files
 end
 
 # Save to CSV
-CSV.write("summary_results.csv", results)
+CSV.write("results.csv", results)
 # D = 4
 # χ = 36
 # hx = 0.3

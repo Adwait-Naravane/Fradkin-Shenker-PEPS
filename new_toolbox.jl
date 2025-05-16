@@ -732,7 +732,28 @@ function ordered_eigenvalues(A::TensorMap)
 
     return data1
 end
+function _dag(A::MPSKit.GenericMPSTensor{S,N}) where {S,N}
+    return permute(A', ((1, (3:(N + 1))...), (2,)))
+end
 
+function correlation_length_gauge(env::CTMRGEnv)
+    #horizontal
+    above_horizontal = InfiniteMPS([env.edges[1,2,1], env.edges[1,2,2]])
+    below_horizontal = InfiniteMPS(_dag.(env.edges[3,1,1], env.edges[3,1,2]))
+    val = MPSKit.transfer_spectrum(above_horizontal; below_horizontal)
+    val = val/abs(val[1])
+    ξh = -1/log(abs(val[2]))
+
+    #vertical
+    above_vertical = InfiniteMPS([env.edges[2,1,1], env.edges[2,2,1]])
+    below_vertical = InfiniteMPS(_dag.(env.edges[4,1,2], env.edges[4,2,2]))
+    val = MPSKit.transfer_spectrum(above_vertical; below_vertical)
+    val = val/abs(val[1])
+    ξv = -1/log(abs(val[2]))
+
+    return ξh, ξv
+
+end
 
 function strings_CTMRG(Ψ::InfinitePEPS, env::CTMRGEnv)
 
@@ -743,6 +764,9 @@ function strings_CTMRG(Ψ::InfinitePEPS, env::CTMRGEnv)
     PB = Z2Space(0 => 2)
     GX = TensorMap(ComplexF64[0.0 1.0; 1.0 0.0], PB ← PB)
     GZ = TensorMap(ComplexF64[1.0 0.0; 0.0 -1.0], PB ← PB)
+
+    #correlation_length
+
 
     #Infinite THooft strings
     vals_tHooft_trivial, vecs_tHooft_trivial, info =
