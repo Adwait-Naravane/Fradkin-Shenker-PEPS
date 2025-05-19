@@ -57,9 +57,9 @@ for file in files
         close(f)
 
         # Compute quantities
-        # Z = partition_function_peps(Ψ)
-        # env_Z = get_new_environment_Z(env, Ψ)
-        ξv, ξh = correlation_length(Ψ, env)
+        Z = partition_function_peps(Ψ)
+        env_Z = get_new_environment_Z(env, Ψ)
+        ξv, ξh = correlation_length_check(Z, env_Z)
 
         vals_tHooft_trivial, vals_tHooft, vals_Wilson_trivial, vals_Wilson = strings_CTMRG(Ψ, env)
         infinite_tHooft = vals_tHooft[1] / vals_tHooft_trivial[1]
