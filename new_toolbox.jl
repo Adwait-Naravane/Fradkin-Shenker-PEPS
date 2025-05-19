@@ -732,27 +732,40 @@ function ordered_eigenvalues(A::TensorMap)
 
     return data1
 end
+correlation_length_check(state, env::CTMRGEnv; num_vals=2, kwargs...) =
+    _correlation_length(env; num_vals, kwargs...)
+
 function _dag(A::MPSKit.GenericMPSTensor{S,N}) where {S,N}
-    return permute(A', ((1, (3:(N + 1))...), (2,)))
+    return permute(A', ((1, (3:(N+1))...), (2,)))
 end
+function _correlation_length(env::CTMRGEnv; num_vals=2, kwargs...)
+    T = scalartype(env)
+    ξ_h = Vector{real(T)}(undef, size(env, 2))
+    ξ_v = Vector{real(T)}(undef, size(env, 3))
+    λ_h = Vector{Vector{T}}(undef, size(env, 2))
+    λ_v = Vector{Vector{T}}(undef, size(env, 3))
 
-function correlation_length_gauge(env::CTMRGEnv)
-    #horizontal
-    above_horizontal = InfiniteMPS([env.edges[1,2,1], env.edges[1,2,2]])
-    below_horizontal = InfiniteMPS(_dag.(env.edges[3,1,1], env.edges[3,1,2]))
-    val = MPSKit.transfer_spectrum(above_horizontal; below_horizontal)
-    val = val/abs(val[1])
-    ξh = -1/log(abs(val[2]))
+    # Horizontal
+    λ_h = map(1:size(env, 2)) do r
+        above = InfiniteMPS(env.edges[NORTH, r, :])
+        below = InfiniteMPS(_dag.(env.edges[SOUTH, r, :]))
+        vals = MPSKit.transfer_spectrum(above; below, num_vals, kwargs...)
+        return vals ./ abs(vals[1]) # normalize largest eigenvalue
+    end
+    @show λ_h
+    ξ_h = map(λ_row -> -1 / log(abs(λ_row[2])), λ_h)
 
-    #vertical
-    above_vertical = InfiniteMPS([env.edges[2,1,1], env.edges[2,2,1]])
-    below_vertical = InfiniteMPS(_dag.(env.edges[4,1,2], env.edges[4,2,2]))
-    val = MPSKit.transfer_spectrum(above_vertical; below_vertical)
-    val = val/abs(val[1])
-    ξv = -1/log(abs(val[2]))
+    # Vertical
+    λ_v = map(1:size(env, 3)) do c
+        above = InfiniteMPS(env.edges[EAST, :, c])
+        below = InfiniteMPS(_dag.(env.edges[WEST, :, c]))
+        vals = MPSKit.transfer_spectrum(above; below, num_vals, kwargs...)
+        return vals ./ abs(vals[1]) # normalize largest eigenvalue
+    end
+    @show λ_v
+    ξ_v = map(λ_row -> -1 / log(abs(λ_row[2])), λ_v)
 
-    return ξh, ξv
-
+    return ξ_h, ξ_v, λ_h, λ_v
 end
 
 function strings_CTMRG(Ψ::InfinitePEPS, env::CTMRGEnv)
