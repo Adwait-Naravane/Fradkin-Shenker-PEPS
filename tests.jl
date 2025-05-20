@@ -54,11 +54,7 @@ env_init = new_leading_boundary(env_init, Ψ, ctm_alg);
 
 opt_alg = PEPSOptimize(;
     boundary_alg=ctm_alg,
-<<<<<<< HEAD
-    optimizer_alg=LBFGS(8; gradtol=1e-4, verbosity=4),
-=======
-    optimizer_alg=LBFGS(8; gradtol=1e-4, maxiter = 400, verbosity=4),
->>>>>>> main
+    optimizer_alg=LBFGS(8; gradtol=1e-4, maxiter = 100, verbosity=4),
     gradient_alg=LinSolver(; iterscheme=:diffgauge),
 )
 
