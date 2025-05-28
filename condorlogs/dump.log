@@ -1,75 +1,50 @@
-000 (2050.000.000) 2025-04-17 10:02:27 Job submitted from host: <157.193.72.74:9618?addrs=157.193.72.74-9618&alias=octopus.ugent.be&noUDP&sock=schedd_1686_08c4>
+000 (2631.000.000) 2025-05-28 15:56:16 Job submitted from host: <157.193.72.74:9618?addrs=157.193.72.74-9618&alias=octopus.ugent.be&noUDP&sock=schedd_1686_08c4>
 ...
-040 (2050.000.000) 2025-05-17 15:04:45 Started transferring input files
-	Transferring to host: <157.193.228.151:9618?addrs=157.193.228.151-9618&alias=erquaf.ugent.be&noUDP&sock=slot1_4_3180482_09ee_391>
+040 (2631.000.000) 2025-05-28 15:56:36 Started transferring input files
+	Transferring to host: <157.193.229.142:9618?addrs=157.193.229.142-9618&alias=purvena.ugent.be&noUDP&sock=slot1_1_3507183_72b4_3213>
 ...
-040 (2050.000.000) 2025-05-17 15:04:45 Finished transferring input files
-...
-001 (2050.000.000) 2025-05-17 15:04:45 Job executing on host: <157.193.228.151:9618?addrs=157.193.228.151-9618&alias=erquaf.ugent.be&noUDP&sock=startd_3180432_64bb>
-	SlotName: slot1_4@erquaf.ugent.be
-	CondorScratchDir = "/var/lib/condor/execute/dir_3364944"
+001 (2631.000.000) 2025-05-28 15:56:36 Job executing on host: <157.193.229.142:9618?addrs=157.193.229.142-9618&alias=purvena.ugent.be&noUDP&sock=startd_3507144_a697>
+	SlotName: slot1_1@purvena.ugent.be
+	CondorScratchDir = "/var/lib/condor/execute/dir_2336347"
 	Cpus = 20
 	Disk = 2098176
 	GPUs = 0
 	Memory = 65536
 ...
-006 (2050.000.000) 2025-05-17 15:04:54 Image size of job updated: 367244
-	359  -  MemoryUsage of job (MB)
-	367244  -  ResidentSetSize of job (KB)
+040 (2631.000.000) 2025-05-28 15:56:36 Finished transferring input files
 ...
-006 (2050.000.000) 2025-05-17 15:09:55 Image size of job updated: 9204340
-	1189  -  MemoryUsage of job (MB)
-	1216572  -  ResidentSetSize of job (KB)
+006 (2631.000.000) 2025-05-28 15:56:44 Image size of job updated: 380436
+	372  -  MemoryUsage of job (MB)
+	380436  -  ResidentSetSize of job (KB)
 ...
-006 (2050.000.000) 2025-05-17 15:14:55 Image size of job updated: 9204340
-	2504  -  MemoryUsage of job (MB)
-	2563988  -  ResidentSetSize of job (KB)
+006 (2631.000.000) 2025-05-28 16:01:08 Image size of job updated: 8872372
+	372  -  MemoryUsage of job (MB)
+	380436  -  ResidentSetSize of job (KB)
 ...
-006 (2050.000.000) 2025-05-17 15:19:56 Image size of job updated: 9204340
-	4836  -  MemoryUsage of job (MB)
-	4951104  -  ResidentSetSize of job (KB)
+040 (2631.000.000) 2025-05-28 16:01:08 Started transferring output files
 ...
-006 (2050.000.000) 2025-05-17 15:24:56 Image size of job updated: 9204340
-	5441  -  MemoryUsage of job (MB)
-	5570848  -  ResidentSetSize of job (KB)
+040 (2631.000.000) 2025-05-28 16:01:08 Finished transferring output files
 ...
-006 (2050.000.000) 2025-05-17 15:29:56 Image size of job updated: 9204340
-	7474  -  MemoryUsage of job (MB)
-	7652724  -  ResidentSetSize of job (KB)
+021 (2631.000.000) 2025-05-28 16:01:08 Error from starter on slot1_1@purvena.ugent.be:
+	STARTER at 157.193.229.142 failed to send file(s) to <157.193.72.74:9618>: |Error: reading from file /var/lib/condor/execute/dir_2336347/final_Psi_trivial_1e4_hx=0: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <157.193.229.142:23925>
+	Code 13 Subcode 2
 ...
-006 (2050.000.000) 2025-05-17 15:34:57 Image size of job updated: 33671840
-	23423  -  MemoryUsage of job (MB)
-	23984192  -  ResidentSetSize of job (KB)
-...
-006 (2050.000.000) 2025-05-17 15:39:57 Image size of job updated: 36966652
-	34784  -  MemoryUsage of job (MB)
-	35617912  -  ResidentSetSize of job (KB)
-...
-006 (2050.000.000) 2025-05-17 15:44:58 Image size of job updated: 38190384
-	34784  -  MemoryUsage of job (MB)
-	35617912  -  ResidentSetSize of job (KB)
-...
-040 (2050.000.000) 2025-05-17 17:12:58 Started transferring output files
-...
-040 (2050.000.000) 2025-05-17 17:12:58 Finished transferring output files
-...
-005 (2050.000.000) 2025-05-17 17:12:58 Job terminated.
-	(1) Normal termination (return value 0)
-		Usr 1 02:54:26, Sys 0 00:44:54  -  Run Remote Usage
+004 (2631.000.000) 2025-05-28 16:01:08 Job was evicted.
+	(0) CPU times
+		Usr 0 00:18:50, Sys 0 00:00:57  -  Run Remote Usage
 		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
-		Usr 1 02:54:26, Sys 0 00:44:54  -  Total Remote Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
-	3011643  -  Run Bytes Sent By Job
-	26957  -  Run Bytes Received By Job
-	3011643  -  Total Bytes Sent By Job
-	26957  -  Total Bytes Received By Job
+	16932  -  Run Bytes Sent By Job
+	244950  -  Run Bytes Received By Job
+	Transfer output files failure at execution point slot1_1@purvena.ugent.be while sending files to access point octopus. Details: reading from file /var/lib/condor/execute/dir_2336347/final_Psi_trivial_1e4_hx=0: (errno 2) No such file or directory
 	Partitionable Resources :     Usage  Request Allocated 
-	   Cpus                 :      8.32       20        20 
-	   Disk (KB)            : 494432     2097152   2098176 
+	   Cpus                 :      1.00       20        20 
+	   Disk (KB)            : 491640     2097152   2098176 
 	   GPUs                 :                            0 
-	   Memory (MB)          :  34784       65536     65536 
-	   TimeExecute (s)      :   7693                       
-	   TimeSlotBusy (s)     :   7693                       
-
-	Job terminated of its own accord at 2025-05-17T15:12:52Z with exit-code 0.
+	   Memory (MB)          :    372       65536     65536 
+	   TimeExecute (s)      :    272                       
+	   TimeSlotBusy (s)     :    272                       
+...
+012 (2631.000.000) 2025-05-28 16:01:08 Job was held.
+	Transfer output files failure at execution point slot1_1@purvena.ugent.be while sending files to access point octopus. Details: reading from file /var/lib/condor/execute/dir_2336347/final_Psi_trivial_1e4_hx=0: (errno 2) No such file or directory
+	Code 12 Subcode 2
 ...
