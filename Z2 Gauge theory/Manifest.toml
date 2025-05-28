@@ -838,8 +838,8 @@ uuid = "efe28fd5-8261-553b-a9e1-b2916fc3738e"
 version = "0.5.6+0"
 
 [[deps.OptimKit]]
-deps = ["LinearAlgebra", "Printf", "ScopedValues", "VectorInterface"]
-git-tree-sha1 = "b0163ac202bc03aeb15f0e55002e544e74965534"
+deps = ["LinearAlgebra", "NaNMath", "Printf", "ScopedValues", "VectorInterface"]
+path = "../OptimKit.jl"
 uuid = "77e91f04-9b3b-57a6-a776-40b61faaebe0"
 version = "0.4.0"
 
