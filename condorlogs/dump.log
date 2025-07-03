@@ -1,50 +1,103 @@
-000 (2631.000.000) 2025-05-28 15:56:16 Job submitted from host: <157.193.72.74:9618?addrs=157.193.72.74-9618&alias=octopus.ugent.be&noUDP&sock=schedd_1686_08c4>
+000 (3935.000.000) 2025-05-28 17:15:09 Job submitted from host: <157.193.72.74:9618?addrs=157.193.72.74-9618&alias=octopus.ugent.be&noUDP&sock=schedd_1686_08c4>
 ...
-040 (2631.000.000) 2025-05-28 15:56:36 Started transferring input files
-	Transferring to host: <157.193.229.142:9618?addrs=157.193.229.142-9618&alias=purvena.ugent.be&noUDP&sock=slot1_1_3507183_72b4_3213>
+040 (3935.000.000) 2025-06-21 22:53:04 Started transferring input files
+	Transferring to host: <157.193.229.95:9618?addrs=157.193.229.95-9618&alias=calana.ugent.be&noUDP&sock=slot1_1_3471145_6aba_4329>
 ...
-001 (2631.000.000) 2025-05-28 15:56:36 Job executing on host: <157.193.229.142:9618?addrs=157.193.229.142-9618&alias=purvena.ugent.be&noUDP&sock=startd_3507144_a697>
-	SlotName: slot1_1@purvena.ugent.be
-	CondorScratchDir = "/var/lib/condor/execute/dir_2336347"
+040 (3935.000.000) 2025-06-21 22:53:04 Finished transferring input files
+...
+001 (3935.000.000) 2025-06-21 22:53:04 Job executing on host: <157.193.229.95:9618?addrs=157.193.229.95-9618&alias=calana.ugent.be&noUDP&sock=startd_3471104_355b>
+	SlotName: slot1_1@calana.ugent.be
+	CondorScratchDir = "/var/lib/condor/execute/dir_2151110"
 	Cpus = 20
 	Disk = 2098176
 	GPUs = 0
 	Memory = 65536
 ...
-040 (2631.000.000) 2025-05-28 15:56:36 Finished transferring input files
+006 (3935.000.000) 2025-06-21 22:53:12 Image size of job updated: 443692
+	434  -  MemoryUsage of job (MB)
+	443692  -  ResidentSetSize of job (KB)
 ...
-006 (2631.000.000) 2025-05-28 15:56:44 Image size of job updated: 380436
-	372  -  MemoryUsage of job (MB)
-	380436  -  ResidentSetSize of job (KB)
+006 (3935.000.000) 2025-06-21 22:58:12 Image size of job updated: 9066108
+	779  -  MemoryUsage of job (MB)
+	797236  -  ResidentSetSize of job (KB)
 ...
-006 (2631.000.000) 2025-05-28 16:01:08 Image size of job updated: 8872372
-	372  -  MemoryUsage of job (MB)
-	380436  -  ResidentSetSize of job (KB)
+006 (3935.000.000) 2025-06-21 23:03:12 Image size of job updated: 9066108
+	1490  -  MemoryUsage of job (MB)
+	1525644  -  ResidentSetSize of job (KB)
 ...
-040 (2631.000.000) 2025-05-28 16:01:08 Started transferring output files
+006 (3935.000.000) 2025-06-21 23:08:13 Image size of job updated: 9066108
+	2531  -  MemoryUsage of job (MB)
+	2591196  -  ResidentSetSize of job (KB)
 ...
-040 (2631.000.000) 2025-05-28 16:01:08 Finished transferring output files
+006 (3935.000.000) 2025-06-21 23:13:13 Image size of job updated: 9066108
+	3378  -  MemoryUsage of job (MB)
+	3458872  -  ResidentSetSize of job (KB)
 ...
-021 (2631.000.000) 2025-05-28 16:01:08 Error from starter on slot1_1@purvena.ugent.be:
-	STARTER at 157.193.229.142 failed to send file(s) to <157.193.72.74:9618>: |Error: reading from file /var/lib/condor/execute/dir_2336347/final_Psi_trivial_1e4_hx=0: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <157.193.229.142:23925>
-	Code 13 Subcode 2
+006 (3935.000.000) 2025-06-21 23:18:14 Image size of job updated: 9066108
+	4045  -  MemoryUsage of job (MB)
+	4141704  -  ResidentSetSize of job (KB)
 ...
-004 (2631.000.000) 2025-05-28 16:01:08 Job was evicted.
-	(0) CPU times
-		Usr 0 00:18:50, Sys 0 00:00:57  -  Run Remote Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
-	16932  -  Run Bytes Sent By Job
-	244950  -  Run Bytes Received By Job
-	Transfer output files failure at execution point slot1_1@purvena.ugent.be while sending files to access point octopus. Details: reading from file /var/lib/condor/execute/dir_2336347/final_Psi_trivial_1e4_hx=0: (errno 2) No such file or directory
-	Partitionable Resources :     Usage  Request Allocated 
-	   Cpus                 :      1.00       20        20 
-	   Disk (KB)            : 491640     2097152   2098176 
-	   GPUs                 :                            0 
-	   Memory (MB)          :    372       65536     65536 
-	   TimeExecute (s)      :    272                       
-	   TimeSlotBusy (s)     :    272                       
+006 (3935.000.000) 2025-06-21 23:23:14 Image size of job updated: 9066108
+	4695  -  MemoryUsage of job (MB)
+	4807348  -  ResidentSetSize of job (KB)
 ...
-012 (2631.000.000) 2025-05-28 16:01:08 Job was held.
-	Transfer output files failure at execution point slot1_1@purvena.ugent.be while sending files to access point octopus. Details: reading from file /var/lib/condor/execute/dir_2336347/final_Psi_trivial_1e4_hx=0: (errno 2) No such file or directory
-	Code 12 Subcode 2
+006 (3935.000.000) 2025-06-21 23:28:14 Image size of job updated: 9066108
+	5679  -  MemoryUsage of job (MB)
+	5814280  -  ResidentSetSize of job (KB)
+...
+006 (3935.000.000) 2025-06-21 23:33:15 Image size of job updated: 19697808
+	19237  -  MemoryUsage of job (MB)
+	19697808  -  ResidentSetSize of job (KB)
+...
+006 (3935.000.000) 2025-06-21 23:38:15 Image size of job updated: 23409996
+	20739  -  MemoryUsage of job (MB)
+	21235924  -  ResidentSetSize of job (KB)
+...
+006 (3935.000.000) 2025-06-21 23:43:16 Image size of job updated: 23833872
+	22884  -  MemoryUsage of job (MB)
+	23432748  -  ResidentSetSize of job (KB)
+...
+006 (3935.000.000) 2025-06-21 23:48:16 Image size of job updated: 25127180
+	23859  -  MemoryUsage of job (MB)
+	24430800  -  ResidentSetSize of job (KB)
+...
+006 (3935.000.000) 2025-06-21 23:53:17 Image size of job updated: 25307892
+	23859  -  MemoryUsage of job (MB)
+	24430812  -  ResidentSetSize of job (KB)
+...
+006 (3935.000.000) 2025-06-22 00:08:19 Image size of job updated: 25600648
+	23986  -  MemoryUsage of job (MB)
+	24560924  -  ResidentSetSize of job (KB)
+...
+006 (3935.000.000) 2025-06-22 00:13:19 Image size of job updated: 26297108
+	25591  -  MemoryUsage of job (MB)
+	26204356  -  ResidentSetSize of job (KB)
+...
+006 (3935.000.000) 2025-06-22 00:18:20 Image size of job updated: 26434972
+	25591  -  MemoryUsage of job (MB)
+	26204356  -  ResidentSetSize of job (KB)
+...
+006 (3935.000.000) 2025-06-22 00:23:20 Image size of job updated: 27167548
+	26381  -  MemoryUsage of job (MB)
+	27013780  -  ResidentSetSize of job (KB)
+...
+006 (3935.000.000) 2025-06-22 00:33:21 Image size of job updated: 28217008
+	26979  -  MemoryUsage of job (MB)
+	27625500  -  ResidentSetSize of job (KB)
+...
+006 (3935.000.000) 2025-06-22 00:38:21 Image size of job updated: 28369020
+	27394  -  MemoryUsage of job (MB)
+	28051304  -  ResidentSetSize of job (KB)
+...
+006 (3935.000.000) 2025-06-22 00:43:22 Image size of job updated: 28826012
+	28040  -  MemoryUsage of job (MB)
+	28712088  -  ResidentSetSize of job (KB)
+...
+006 (3935.000.000) 2025-06-22 00:48:22 Image size of job updated: 29604868
+	28912  -  MemoryUsage of job (MB)
+	29604868  -  ResidentSetSize of job (KB)
+...
+006 (3935.000.000) 2025-06-22 00:53:23 Image size of job updated: 29621196
+	28913  -  MemoryUsage of job (MB)
+	29606784  -  ResidentSetSize of job (KB)
 ...

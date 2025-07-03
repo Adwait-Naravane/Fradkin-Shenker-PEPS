@@ -754,7 +754,7 @@ function _correlation_length(env::CTMRGEnv; num_vals=2, kwargs...)
         vals = MPSKit.transfer_spectrum(above; below, num_vals, kwargs...)
         return vals ./ abs(vals[1]) # normalize largest eigenvalue
     end
-    @show λ_h
+
     ξ_h = map(λ_row -> -1 / log(abs(λ_row[2])), λ_h)
 
     # Vertical
@@ -764,11 +764,21 @@ function _correlation_length(env::CTMRGEnv; num_vals=2, kwargs...)
         vals = MPSKit.transfer_spectrum(above; below, num_vals, kwargs...)
         return vals ./ abs(vals[1]) # normalize largest eigenvalue
     end
-    @show λ_v
+
     ξ_v = map(λ_row -> -1 / log(abs(λ_row[2])), λ_v)
 
     return ξ_h, ξ_v, λ_h, λ_v
 end
+
+function correlation_length_VUMPS(Z::InfiniteSquareNetwork, χ::Int)
+    mps_init = InfiniteMPS([rand(ComplexF64, Z2Space(0 => χ) ⊗ space(Z[1], 1) ← Z2Space(0 => χ))])
+    MPOT = InfiniteMPO([Z[1]])
+    mps, env, ϵ = leading_boundary(mps_init, MPOT, VUMPS(; tol=1e-12, verbosity=2))
+    vals = MPSKit.transfer_spectrum(mps)
+    ξ = -1 / log(abs(vals[2] / vals[1])) # correlation length   
+    return ξ
+end
+
 
 function strings_CTMRG(Ψ::InfinitePEPS, env::CTMRGEnv)
 
@@ -819,14 +829,14 @@ function strings_CTMRG(Ψ::InfinitePEPS, env::CTMRGEnv)
 
 
     vals_Wilson, vecs_wilson, info =
-        eigsolve(TensorMap(randn, scalartype(N_A), space(N_A, 1) ⊗ VB_North' ⊗ VB_North ⊗ Z2Space(1 => 1) ← space(N_A, 1)), 1, :LM) do v
+        eigsolve(TensorMap(randn, scalartype(N_A), space(N_A, 1) ⊗ VB_North' ⊗ VB_North ← Z2Space(1 => 1) ⊗ space(N_A, 1)), 1, :LM) do v
 
-            @tensor opt = true vout[-4 -1 -2 -5; -3] :=
+            @tensor opt = true vout[-4 -1 -2; -5 -3] :=
                 env.edges[1, 2, 1][1 2 3; -3] * env.edges[1, 2, 2][7 8 9; 1] *
                 env.edges[3, 2, 1][-4 4 5; 6] * env.edges[3, 2, 2][6 10 11; 12] *
                 Ψ[1, 1][13; 2 -1 4 14] * conj(Ψ[1, 1][13; 3 -2 5 15]) *
                 Ψ[1, 2][18; 8 14 10 16] * conj(Ψ[1, 2][19; 9 15 11 17]) * GX[19; 18] *
-                v[12 16 17 -5; 7]
+                v[12 16 17; -5 7]
 
         end
 
@@ -837,73 +847,73 @@ end
 
 #Partition function PEPO 
 
-function plaquette(k_p::Number)
-    PB = Z2Space(0 => 2)
-    PT = Z2Space(0 => 1)
-    B = zeros(1, 1, 2, 2, 2, 2)
-    B[1, 1, 1, 1, 1, 1] = cosh(k_p)
-    B[1, 1, 2, 2, 2, 2] = sinh(k_p)
+# function plaquette(k_p::Number)
+#     PB = Z2Space(0 => 2)
+#     PT = Z2Space(0 => 1)
+#     B = zeros(1, 1, 2, 2, 2, 2)
+#     B[1, 1, 1, 1, 1, 1] = cosh(k_p)
+#     B[1, 1, 2, 2, 2, 2] = sinh(k_p)
 
-    B = TensorMap(B, PT ⊗ PT' ← PB ⊗ PB ⊗ PB' ⊗ PB')
-    return B
-end
+#     B = TensorMap(B, PT ⊗ PT' ← PB ⊗ PB ⊗ PB' ⊗ PB')
+#     return B
+# end
 
-function bond(k_b::Number)
-    PB = Z2Space(0 => 2)
-    PA = Z2Space(0 => 1, 1 => 1)
-    G = zeros(2, 2, 2, 2, 2, 2)
+# function bond(k_b::Number)
+#     PB = Z2Space(0 => 2)
+#     PA = Z2Space(0 => 1, 1 => 1)
+#     G = zeros(2, 2, 2, 2, 2, 2)
 
-    for (i, j, k, l) in Iterators.product([1:2 for _ in 1:4]...)
-        if mod(i + j + k + l - 4, 2) == 0
-            G[i, j, 1, k, 1, l] = cosh(k_b)
-        elseif mod(i + j + k + l - 4, 2) == 1
-            G[i, j, 2, k, 2, l] = sinh(k_b)
-        end
-    end
-    G = TensorMap(G, PB ⊗ PB' ← PA ⊗ PB ⊗ PA' ⊗ PB')
+#     for (i, j, k, l) in Iterators.product([1:2 for _ in 1:4]...)
+#         if mod(i + j + k + l - 4, 2) == 0
+#             G[i, j, 1, k, 1, l] = cosh(k_b)
+#         elseif mod(i + j + k + l - 4, 2) == 1
+#             G[i, j, 2, k, 2, l] = sinh(k_b)
+#         end
+#     end
+#     G = TensorMap(G, PB ⊗ PB' ← PA ⊗ PB ⊗ PA' ⊗ PB')
 
-    return G
-end
+#     return G
+# end
 
-function matter()
-    PA = Z2Space(0 => 1, 1 => 1)
-    D = zeros(2, 2, 2, 2, 2, 2)
-    for (i, j, k, l, m, n) in Iterators.product([1:2 for _ in 1:6]...)
-        if mod(i + j + k + l + m + n - 6, 2) == 0
-            D[i, j, k, l, m, n] = 1
-        end
-    end
+# function matter()
+#     PA = Z2Space(0 => 1, 1 => 1)
+#     D = zeros(2, 2, 2, 2, 2, 2)
+#     for (i, j, k, l, m, n) in Iterators.product([1:2 for _ in 1:6]...)
+#         if mod(i + j + k + l + m + n - 6, 2) == 0
+#             D[i, j, k, l, m, n] = 1
+#         end
+#     end
 
-    D = TensorMap(D, PA ⊗ PA' ← PA ⊗ PA ⊗ PA' ⊗ PA')
-    return D
-end
+#     D = TensorMap(D, PA ⊗ PA' ← PA ⊗ PA ⊗ PA' ⊗ PA')
+#     return D
+# end
 
-function trivial_tensor()
-    PT = Z2Space(0 => 1)
-    T = zeros(1, 1, 1, 1, 1, 1)
-    T[1, 1, 1, 1, 1, 1] = 1
-    T = TensorMap(T, PT ⊗ PT' ← PT ⊗ PT ⊗ PT' ⊗ PT')
-    return T
-end
+# function trivial_tensor()
+#     PT = Z2Space(0 => 1)
+#     T = zeros(1, 1, 1, 1, 1, 1)
+#     T[1, 1, 1, 1, 1, 1] = 1
+#     T = TensorMap(T, PT ⊗ PT' ← PT ⊗ PT ⊗ PT' ⊗ PT')
+#     return T
+# end
 
-function partition_function_pepo(hx::Number, hz::Number, Jx::Number, Jz::Number)
-    kb_perp = hz
-    kp_perp = Jz
-    kb_par = -1/2 * log(tanh(Jx))
-    kp_par = -1/2 * log(tanh(hx))
+# function partition_function_pepo(hx::Number, hz::Number, Jx::Number, Jz::Number)
+#     kb_perp = hz
+#     kp_perp = Jz
+#     kb_par = -1 / 2 * log(tanh(Jx))
+#     kp_par = -1 / 2 * log(tanh(hx))
 
-    matter_tensor = matter()
-    bond_1 = bond(kb_perp)
-    bond_2 = permute(bond_1, ((1,2), (6,3,4,5)))
-    bond_3 = permute(bond(kb_par), ((5,3), (1,4,2,6)))
+#     matter_tensor = matter()
+#     bond_1 = bond(kb_perp)
+#     bond_2 = permute(bond_1, ((1, 2), (6, 3, 4, 5)))
+#     bond_3 = permute(bond(kb_par), ((5, 3), (1, 4, 2, 6)))
 
-    plaq_1 = plaquette(kp_perp)
-    plaq_2 = permute(plaquette(kp_par), ((5,3), (1,4,2,6)))
-    plaq_3 = permute(plaq_2, ((1,2), (6,3,4,5)))
+#     plaq_1 = plaquette(kp_perp)
+#     plaq_2 = permute(plaquette(kp_par), ((5, 3), (1, 4, 2, 6)))
+#     plaq_3 = permute(plaq_2, ((1, 2), (6, 3, 4, 5)))
 
-    trivial = trivial_tensor()
+#     trivial = trivial_tensor()
 
-end
+# end
 
 
 

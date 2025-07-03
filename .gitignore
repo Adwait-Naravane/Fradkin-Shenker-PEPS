@@ -3,7 +3,11 @@ condor_logs/
 
 # Ignore saved tensor network data
 Saved_content/
+Saved_content_sequential/
+
+pics/
 
 *.jld2
 *.err
 *.out
+*.svg

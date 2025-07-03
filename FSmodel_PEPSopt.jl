@@ -2,7 +2,7 @@ using Pkg
 Pkg.develop(path="./OptimKit.jl/")
 Pkg.instantiate()
 using Profile
-# Get command-line arguments: hx, hz, χ, D
+# # Get command-line arguments: hx, hz, χ, D
 if length(ARGS) < 4
     error("Usage: julia FSmodel_PEPSopt.jl <hx> <hz> <χ> <D>")
 end
@@ -13,8 +13,8 @@ hz = parse(Float64, ARGS[2])
 D  = parse(Int, ARGS[4])
 # hx = 0.34
 # hz = 0.34
-# χ = 16 # environment bond dimension
-# D = 4 # PEPS bond dimension
+# χ = 36 # environment bond dimension
+# D = 6 # PEPS bond dimension
 println("Running with: hx=$hx, hz=$hz, χ=$χ, D=$D")
 include("new_toolbox.jl")
 
@@ -24,7 +24,6 @@ p = P / 2
 v = Int(D / 2)
 symm = Z2Irrep
 
-H = Fradkin_Shenker(InfiniteSquare(2, 2); Jx=1, Jz=1, hx=hx, hz=hz, pdim=2, vdim=4);
 
 
 # file = jldopen("final_Psi_trivial_hx=$(hx)_hz=$(hz)_χ=$(χ)_D=$(D).jld2", "r")
@@ -61,6 +60,7 @@ opt_alg = PEPSOptimize(;
     
 )
 
+H = Fradkin_Shenker(InfiniteSquare(2, 2); Jx=1, Jz=1, hx=hx, hz=hz, pdim=2, vdim=4);
 
 # Ψ = peps_Gauge_trivial(A);
 # env_init = env 

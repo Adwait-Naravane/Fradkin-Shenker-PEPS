@@ -94,7 +94,7 @@ nice_user = TRUE
 arguments = --project=. FSmodel_PEPSopt.jl ${hx_clean} ${hz_clean} ${chi} ${D}
 transfer_input_files = OptimKit.jl, FSmodel_PEPSopt.jl, new_toolbox.jl, Project.toml
 
-transfer_output_files = final_Psi_trivial_1e4_hx=${hx_fmt}_hz=${hz_fmt}_χ=${chi}_D=${D}.jld2
+transfer_output_files = final_Psi_trivial_1e4_hx=${hx_clean}_hz=${hz_clean}_χ=${chi}_D=${D}.jld2
 
 should_transfer_files   = TRUE
 preserve_relative_paths = TRUE
