@@ -25,14 +25,16 @@ results = DataFrame(
     hx=Float64[],
     hz=Float64[],
     chi=Int[],
-    D=Int[], ξv=Float64[],
-    ξh=Float64[],
-    ξ_vumps=Float64[]
+    D=Int[],
+    E=[], infinite_tHooft=ComplexF64[],
+    infinite_Wilson=ComplexF64[], infinite_Wilson_odd=ComplexF64[],
+    FMstring=Float64[], PKstring_odd=Float64[]
 )
 
 for file in files
     filename = split(basename(file), ".jld2")[1]
     println("Processing $filename")
+
     try
         # Extract params using regex
         m = match(r"hx=([0-9.eE+-]+)_hz=([0-9.eE+-]+)_χ=([0-9]+)_D=([0-9]+)", filename)
@@ -56,21 +58,23 @@ for file in files
         # Compute quantities
         Z = partition_function_peps(Ψ)
         env_Z = get_new_environment_Z(env, Ψ)
-        ctm_alg = SequentialCTMRG(; maxiter=200, tol=1e-9, verbosity=2)
+        env_Z, = leading_boundary(env_Z, Z, SequentialCTMRG(; maxiter=200, tol=1e-9, verbosity=2))
 
-        env_Z, = leading_boundary(env_Z, Z, ctm_alg)
-        ξv, ξh = correlation_length_check(Z, env_Z)
-        ξ_vumps = correlation_length_VUMPS(Z, chi)
+        env = retrieve_old_environment(env_Z, Ψ)
+        vals_tHooft_trivial, vals_tHooft, vals_Wilson_trivial, vals_Wilson_trivial_odd, vals_Wilson, vecs_tHooft_trivial, vecs_tHooft, vecs_Wilson_trivial, vecs_wilson_trivial_odd, vecs_Wilson = strings_CTMRG(Ψ, env)
+        infinite_tHooft = vals_tHooft[1] / vals_tHooft_trivial[1]
+        infinite_Wilson = vals_Wilson[1] / vals_Wilson_trivial[1]
+        infinite_Wilson_odd = vals_Wilson[1] / vals_Wilson_trivial_odd[1]
+        FMstring = abs(dot(vecs_tHooft_trivial[1], vecs_tHooft[1]))
+        PKstring_odd = abs(dot(vecs_wilson_trivial_odd[1], vecs_Wilson[1]))
+        @show infinite_tHooft
         # Append to results
-        push!(results, (hx, hz, chi, D, ξv[1], ξh[1], ξ_vumps))
+        push!(results, (hx, hz, chi, D, E, infinite_tHooft, infinite_Wilson, infinite_Wilson_odd, FMstring, PKstring_odd))
 
     catch e
         @warn "Skipping $file due to error" exception = e
     end
-
 end
 
-
-CSV.write("correlationlengths.csv", results)
-
-
+# Save to CSV
+CSV.write("strings.csv", results)

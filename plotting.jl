@@ -2,7 +2,7 @@ using CSV, DataFrames, Plots
 default(fontfamily = "Computer Modern", size=(700, 550), legend=false, grid=:dash)
 
 # Load the data
-df = CSV.read("results.csv", DataFrame)
+df = CSV.read("strings.csv", DataFrame)
 
 # Get all unique D and chi values
 Ds = unique(df.D)
@@ -26,9 +26,10 @@ for D in Ds, chi in chis
         hz = df_filtered.hz
         tHooft_vals = abs.(real.(parse.(ComplexF64, df_filtered.infinite_tHooft)))
         Wilson_vals = abs.(real.(parse.(ComplexF64, df_filtered.infinite_Wilson)))
-        mv = 1 ./ df_filtered.ξv
-        mh = 1 ./ df_filtered.ξh
-        E_vals = df_filtered.E
+        FMstring_vals = df_filtered.FMstring
+        # mv = 1 ./ df_filtered.ξv
+        # mh = 1 ./ df_filtered.ξh
+        # E_vals = df_filtered.E
 
         function plot_and_save(zvals, title_str, cbar_str, filename, cmap)
             scatter(hx, hz;
@@ -60,25 +61,30 @@ for D in Ds, chi in chis
             "Infinite Wilson String",
             "Infinite Wilson",
             "infinite_Wilson_D=$(D)_chi=$(chi).svg",
-            :viridis)
+            :magma)
+        plot_and_save(FMstring_vals,
+            "Fredenhagen-Marcu String",
+            "Fredenhagen-Marcu",
+            "FMstring_D=$(D)_chi=$(chi).svg",
+            :magma)
 
-        plot_and_save(E_vals,
-            "Ground State Energy",
-            "Energy",
-            "GroundstateEnergy_D=$(D)_chi=$(chi).svg",
-            :coolwarm)
+        # plot_and_save(E_vals,
+        #     "Ground State Energy",
+        #     "Energy",
+        #     "GroundstateEnergy_D=$(D)_chi=$(chi).svg",
+        #     :coolwarm)
 
-        plot_and_save(mv,
-            "Inverse Correlation Length (v)",
-            "1/ξv",
-            "InverseCorrelationLength_v_D=$(D)_chi=$(chi).svg",
-            :plasma)
+        # plot_and_save(mv,
+        #     "Inverse Correlation Length (v)",
+        #     "1/ξv",
+        #     "InverseCorrelationLength_v_D=$(D)_chi=$(chi).svg",
+        #     :plasma)
 
-        plot_and_save(mh,
-            "Inverse Correlation Length (h)",
-            "1/ξₕ",
-            "InverseCorrelationLength_h_D=$(D)_chi=$(chi).svg",
-            :cividis)
+        # plot_and_save(mh,
+        #     "Inverse Correlation Length (h)",
+        #     "1/ξₕ",
+        #     "InverseCorrelationLength_h_D=$(D)_chi=$(chi).svg",
+        #     :cividis)
 
         @info "Plotted D=$D, chi=$chi"
 

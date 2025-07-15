@@ -1,20 +1,20 @@
 using Pkg
-Pkg.develop(path="./OptimKit.jl/")
+#Pkg.develop(path="./OptimKit.jl/")
 Pkg.instantiate()
 using Profile
 # # Get command-line arguments: hx, hz, χ, D
-if length(ARGS) < 4
-    error("Usage: julia FSmodel_PEPSopt.jl <hx> <hz> <χ> <D>")
-end
+# if length(ARGS) < 4
+#     error("Usage: julia FSmodel_PEPSopt.jl <hx> <hz> <χ> <D>")
+# end
 
-hx = parse(Float64, ARGS[1])
-hz = parse(Float64, ARGS[2])
-χ  = parse(Int, ARGS[3])
-D  = parse(Int, ARGS[4])
-# hx = 0.34
-# hz = 0.34
-# χ = 36 # environment bond dimension
-# D = 6 # PEPS bond dimension
+# hx = parse(Float64, ARGS[1])
+# hz = parse(Float64, ARGS[2])
+# χ  = parse(Int, ARGS[3])
+# D  = parse(Int, ARGS[4])
+hx = 0.34
+hz = 0.34
+χ = 24 # environment bond dimension
+D = 4 # PEPS bond dimension
 println("Running with: hx=$hx, hz=$hz, χ=$χ, D=$D")
 include("new_toolbox.jl")
 
@@ -47,18 +47,24 @@ A = TensorMap(randn, ComplexF64, PA ← V ⊗ V ⊗ V' ⊗ V');
 Ψ = peps_Gauge_trivial(A);
 Ψ[1, 1] = my_symmetrize(Ψ[1, 1]);
 A = Ψ[1, 1];
-ctm_alg = SequentialCTMRG(; tol=1e-9, verbosity=2)
+ctm_alg = SimultaneousCTMRG(; tol=1e-9, verbosity=2)
 env_init = CTMRGEnv(Ψ, Z2Space(0 => χ));
 env_init = new_leading_boundary(env_init, Ψ, ctm_alg);
 #env_init = env
 
 
+# opt_alg = PEPSOptimize(;
+#     boundary_alg=ctm_alg,
+#     optimizer_alg=LBFGS(8; gradtol=1e-4, maxiter = 200, verbosity=4, linesearch = BackTrackingLineSearch()),
+#     gradient_alg=LinSolver(; iterscheme=:diffgauge),
+    
+# )
 opt_alg = PEPSOptimize(;
     boundary_alg=ctm_alg,
-    optimizer_alg=LBFGS(8; gradtol=1e-4, maxiter = 200, verbosity=4, linesearch = BackTrackingLineSearch()),
-    gradient_alg=LinSolver(; iterscheme=:diffgauge),
-    
-)
+    optimizer_alg=LBFGS(8; gradtol=1e-4, maxiter=200, verbosity=4),
+    gradient_alg=EigSolver(;
+        solver_alg=Arnoldi(; tol=1e-7, maxiter=3, verbosity=3, krylovdim=200, eager=true), iterscheme=:fixed))
+
 
 H = Fradkin_Shenker(InfiniteSquare(2, 2); Jx=1, Jz=1, hx=hx, hz=hz, pdim=2, vdim=4);
 
@@ -68,7 +74,8 @@ H = Fradkin_Shenker(InfiniteSquare(2, 2); Jx=1, Jz=1, hx=hx, hz=hz, pdim=2, vdim
 
 # env_init = new_leading_boundary(env_init, Ψ, ctm_alg);
 
-(A, env), E, ∂E, numfg, convhistory = optimize(
+#(A, env), E, ∂E, numfg, convhistory = 
+@profview optimize(
     (A, env_init), opt_alg.optimizer_alg; retract=my_retract_trivial, inner=my_inner_trivial, (transport!)=(my_transport_trivial!), (scale!)=my_scale!, (add!)=my_add!, (finalize!)=OptimKit._finalize!
 ) do (A, envs)
     E, gs = withgradient(A) do A

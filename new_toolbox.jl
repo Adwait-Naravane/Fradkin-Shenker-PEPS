@@ -828,6 +828,18 @@ function strings_CTMRG(Ψ::InfinitePEPS, env::CTMRGEnv)
         end
 
 
+    vals_Wilson_trivial_odd, vecs_wilson_trivial_odd, info =
+        eigsolve(TensorMap(randn, scalartype(N_A), space(N_A, 1) ⊗ VB_North' ⊗ VB_North ← Z2Space(1 => 1) ⊗ space(N_A, 1)), 1, :LM) do v
+
+            @tensor opt = true vout[-4 -1 -2; -5 -3] :=
+                env.edges[1, 2, 1][1 2 3; -3] * env.edges[1, 2, 2][7 8 9; 1] *
+                env.edges[3, 2, 1][-4 4 5; 6] * env.edges[3, 2, 2][6 10 11; 12] *
+                Ψ[1, 1][13; 2 -1 4 14] * conj(Ψ[1, 1][13; 3 -2 5 15]) *
+                Ψ[1, 2][18; 8 14 10 16] * conj(Ψ[1, 2][18; 9 15 11 17]) *
+                v[12 16 17; -5 7]
+
+        end
+
     vals_Wilson, vecs_wilson, info =
         eigsolve(TensorMap(randn, scalartype(N_A), space(N_A, 1) ⊗ VB_North' ⊗ VB_North ← Z2Space(1 => 1) ⊗ space(N_A, 1)), 1, :LM) do v
 
@@ -840,10 +852,9 @@ function strings_CTMRG(Ψ::InfinitePEPS, env::CTMRGEnv)
 
         end
 
-    return vals_tHooft_trivial, vals_tHooft, vals_Wilson_trivial, vals_Wilson
+    return vals_tHooft_trivial, vals_tHooft, vals_Wilson_trivial, vals_Wilson_trivial_odd, vals_Wilson,  vecs_tHooft_trivial, vecs_tHooft, vecs_Wilson_trivial, vecs_wilson_trivial_odd, vecs_wilson
+
 end
-
-
 
 #Partition function PEPO 
 

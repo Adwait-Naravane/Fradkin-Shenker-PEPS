@@ -29,7 +29,8 @@ results = DataFrame(
     ξv=Float64[],
     ξh=Float64[],
     infinite_tHooft=ComplexF64[],
-    infinite_Wilson=ComplexF64[]
+    infinite_Wilson=ComplexF64[],
+    FMstring=Float64[]
 )
 
 for file in files
@@ -59,14 +60,16 @@ for file in files
         # Compute quantities
         Z = partition_function_peps(Ψ)
         env_Z = get_new_environment_Z(env, Ψ)
+        env_Z, = leading_boundary(env_Z, Z, SequentialCTMRG(; maxiter = 200, tol=1e-9, verbosity=2))
         ξv, ξh = correlation_length_check(Z, env_Z)
-
-        vals_tHooft_trivial, vals_tHooft, vals_Wilson_trivial, vals_Wilson = strings_CTMRG(Ψ, env)
+        env = retrieve_old_environment(env_Z, Ψ)
+        vals_tHooft_trivial, vals_tHooft, vals_Wilson_trivial, vals_Wilson, vecs_tHooft_trivial, vecs_tHooft, vecs_Wilson_trivial, vecs_Wilson = strings_CTMRG(Ψ, env)
         infinite_tHooft = vals_tHooft[1] / vals_tHooft_trivial[1]
         infinite_Wilson = vals_Wilson[1] / vals_Wilson_trivial[1]
+        FMstring = abs(dot(vecs_tHooft_trivial[1], vecs_tHooft[1]))
         @show infinite_tHooft
         # Append to results
-        push!(results, (hx, hz, chi, D, E, ξv[1], ξh[1], infinite_tHooft, infinite_Wilson))
+        push!(results, (hx, hz, chi, D, E, ξv[1], ξh[1], infinite_tHooft, infinite_Wilson, FMstring))
 
     catch e
         @warn "Skipping $file due to error" exception = e
