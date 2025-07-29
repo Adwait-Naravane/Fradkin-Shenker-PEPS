@@ -16,7 +16,7 @@ hz = 0.34
 χ = 24 # environment bond dimension
 D = 4 # PEPS bond dimension
 println("Running with: hx=$hx, hz=$hz, χ=$χ, D=$D")
-include("new_toolbox.jl")
+include("utility/new_toolbox.jl")
 
 
 P = 2 # PEPS physical dimension
@@ -57,7 +57,7 @@ env_init = new_leading_boundary(env_init, Ψ, ctm_alg);
 #     boundary_alg=ctm_alg,
 #     optimizer_alg=LBFGS(8; gradtol=1e-4, maxiter = 200, verbosity=4, linesearch = BackTrackingLineSearch()),
 #     gradient_alg=LinSolver(; iterscheme=:diffgauge),
-    
+
 # )
 opt_alg = PEPSOptimize(;
     boundary_alg=ctm_alg,
@@ -74,27 +74,27 @@ H = Fradkin_Shenker(InfiniteSquare(2, 2); Jx=1, Jz=1, hx=hx, hz=hz, pdim=2, vdim
 
 # env_init = new_leading_boundary(env_init, Ψ, ctm_alg);
 
-#(A, env), E, ∂E, numfg, convhistory = 
-@profview optimize(
-    (A, env_init), opt_alg.optimizer_alg; retract=my_retract_trivial, inner=my_inner_trivial, (transport!)=(my_transport_trivial!), (scale!)=my_scale!, (add!)=my_add!, (finalize!)=OptimKit._finalize!
-) do (A, envs)
-    E, gs = withgradient(A) do A
-        Ψ = peps_Gauge_trivial(A)
-        envs´ = hook_pullback(
-            new_leading_boundary,
-            envs,
-            Ψ,
-            opt_alg.boundary_alg;
-            alg_rrule=opt_alg.gradient_alg,
-        )
-        ignore_derivatives() do
-            opt_alg.reuse_env && update!(envs, envs´)
+(A, env), E, ∂E, numfg, convhistory =
+    optimize(
+        (A, env_init), opt_alg.optimizer_alg; retract=my_retract_trivial, inner=my_inner_trivial, (transport!)=(my_transport_trivial!), (scale!)=my_scale!, (add!)=my_add!, (finalize!)=OptimKit._finalize!
+    ) do (A, envs)
+        E, gs = withgradient(A) do A
+            Ψ = peps_Gauge_trivial(A)
+            envs´ = hook_pullback(
+                new_leading_boundary,
+                envs,
+                Ψ,
+                opt_alg.boundary_alg;
+                alg_rrule=opt_alg.gradient_alg,
+            )
+            ignore_derivatives() do
+                opt_alg.reuse_env && update!(envs, envs´)
+            end
+            return costfun(Ψ, envs´, H)
         end
-        return costfun(Ψ, envs´, H)
+        gs = my_symmetrize(gs)
+        return E, gs
     end
-    gs = my_symmetrize(gs)
-    return E, gs
-end
 
 # using ProfileSVG
 # Profile.clear()

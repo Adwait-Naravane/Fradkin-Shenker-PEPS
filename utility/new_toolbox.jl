@@ -143,6 +143,7 @@ end
 
 function peps_Gauge_trivial(A::PEPSTensor)
     p = 1
+    D = dim(space(A, 2))
     v = Int(D / 2)
 
     PB = Z2Space(0 => 2 * p)
@@ -734,13 +735,13 @@ function ordered_eigenvalues(A::TensorMap)
 
     return data1
 end
-correlation_length_check(state, env::CTMRGEnv; num_vals=2, kwargs...) =
+correlation_length_check(state, env::CTMRGEnv; num_vals=5, kwargs...) =
     _correlation_length(env; num_vals, kwargs...)
 
 function _dag(A::MPSKit.GenericMPSTensor{S,N}) where {S,N}
     return permute(A', ((1, (3:(N+1))...), (2,)))
 end
-function _correlation_length(env::CTMRGEnv; num_vals=2, kwargs...)
+function _correlation_length(env::CTMRGEnv; num_vals=5, kwargs...)
     T = scalartype(env)
     ξ_h = Vector{real(T)}(undef, size(env, 2))
     ξ_v = Vector{real(T)}(undef, size(env, 3))
@@ -767,7 +768,22 @@ function _correlation_length(env::CTMRGEnv; num_vals=2, kwargs...)
 
     ξ_v = map(λ_row -> -1 / log(abs(λ_row[2])), λ_v)
 
-    return ξ_h, ξ_v, λ_h, λ_v
+
+    λ_h_north = map(1:size(env, 2)) do r
+        above = InfiniteMPS(env.edges[NORTH, r, :])
+
+        vals = MPSKit.transfer_spectrum(above; num_vals, kwargs...)
+        return vals ./ abs(vals[1]) # normalize largest eigenvalue
+    end
+
+    λ_h_south = map(1:size(env, 2)) do r
+        above = InfiniteMPS(env.edges[SOUTH, r, :])
+
+        vals = MPSKit.transfer_spectrum(above; num_vals, kwargs...)
+        return vals ./ abs(vals[1]) # normalize largest eigenvalue
+    end
+
+    return ξ_h, ξ_v, λ_h, λ_v, λ_h_north, λ_h_south
 end
 
 function correlation_length_VUMPS(Z::InfiniteSquareNetwork, χ::Int)
@@ -852,7 +868,7 @@ function strings_CTMRG(Ψ::InfinitePEPS, env::CTMRGEnv)
 
         end
 
-    return vals_tHooft_trivial, vals_tHooft, vals_Wilson_trivial, vals_Wilson_trivial_odd, vals_Wilson,  vecs_tHooft_trivial, vecs_tHooft, vecs_Wilson_trivial, vecs_wilson_trivial_odd, vecs_wilson
+    return vals_tHooft_trivial, vals_tHooft, vals_Wilson_trivial, vals_Wilson_trivial_odd, vals_Wilson, vecs_tHooft_trivial, vecs_tHooft, vecs_Wilson_trivial, vecs_wilson_trivial_odd, vecs_wilson
 
 end
 

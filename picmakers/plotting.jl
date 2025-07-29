@@ -1,4 +1,5 @@
 using CSV, DataFrames, Plots
+
 default(fontfamily = "Computer Modern", size=(700, 550), legend=false, grid=:dash)
 
 # Load the data
@@ -27,6 +28,7 @@ for D in Ds, chi in chis
         tHooft_vals = abs.(real.(parse.(ComplexF64, df_filtered.infinite_tHooft)))
         Wilson_vals = abs.(real.(parse.(ComplexF64, df_filtered.infinite_Wilson)))
         FMstring_vals = df_filtered.FMstring
+        PKstring_odd = df_filtered.PKstring_odd
         # mv = 1 ./ df_filtered.ξv
         # mh = 1 ./ df_filtered.ξh
         # E_vals = df_filtered.E
@@ -66,6 +68,12 @@ for D in Ds, chi in chis
             "Fredenhagen-Marcu String",
             "Fredenhagen-Marcu",
             "FMstring_D=$(D)_chi=$(chi).svg",
+            :magma)
+
+        plot_and_save(PKstring_odd,
+            "Pfeifer-Kogut String (odd)",
+            "Pfeifer-Kogut",
+            "PKstring_odd_D=$(D)_chi=$(chi).svg",
             :magma)
 
         # plot_and_save(E_vals,

@@ -13,7 +13,7 @@ Pkg.instantiate()
 # D = parse(Int, ARGS[4])
 
 # println("Running with: hx=$hx, hz=$hz, χ=$χ, D=$D")
-include("new_toolbox.jl")
+include("../utility/new_toolbox.jl")
 
 using JLD2, FileIO, Glob, CSV, DataFrames
 
@@ -25,16 +25,17 @@ results = DataFrame(
     hx=Float64[],
     hz=Float64[],
     chi=Int[],
-    D=Int[],
-    E=[], infinite_tHooft=ComplexF64[],
-    infinite_Wilson=ComplexF64[], infinite_Wilson_odd=ComplexF64[],
-    FMstring=Float64[], PKstring_odd=Float64[]
+    D=Int[], ξv=Float64[],
+    ξh=Float64[],
+    ξ_vumps=Float64[]
 )
+
+logfile = open("boundary_spectrum_diagnostics.txt", "w")
+
 
 for file in files
     filename = split(basename(file), ".jld2")[1]
     println("Processing $filename")
-
     try
         # Extract params using regex
         m = match(r"hx=([0-9.eE+-]+)_hz=([0-9.eE+-]+)_χ=([0-9]+)_D=([0-9]+)", filename)
@@ -58,23 +59,30 @@ for file in files
         # Compute quantities
         Z = partition_function_peps(Ψ)
         env_Z = get_new_environment_Z(env, Ψ)
-        env_Z, = leading_boundary(env_Z, Z, SequentialCTMRG(; maxiter=200, tol=1e-9, verbosity=2))
+        ctm_alg = SequentialCTMRG(; maxiter=200, tol=1e-9, verbosity=2)
 
-        env = retrieve_old_environment(env_Z, Ψ)
-        vals_tHooft_trivial, vals_tHooft, vals_Wilson_trivial, vals_Wilson_trivial_odd, vals_Wilson, vecs_tHooft_trivial, vecs_tHooft, vecs_Wilson_trivial, vecs_wilson_trivial_odd, vecs_Wilson = strings_CTMRG(Ψ, env)
-        infinite_tHooft = vals_tHooft[1] / vals_tHooft_trivial[1]
-        infinite_Wilson = vals_Wilson[1] / vals_Wilson_trivial[1]
-        infinite_Wilson_odd = vals_Wilson[1] / vals_Wilson_trivial_odd[1]
-        FMstring = abs(dot(vecs_tHooft_trivial[1], vecs_tHooft[1]))
-        PKstring_odd = abs(dot(vecs_wilson_trivial_odd[1], vecs_Wilson[1]))
-        @show infinite_tHooft
+        env_Z, = leading_boundary(env_Z, Z, ctm_alg)
+        ξv, ξh, λv, λh, λ_h_north, λ_h_south = correlation_length_check(Z, env_Z)
+        ξ_vumps = correlation_length_VUMPS(Z, chi)
         # Append to results
-        push!(results, (hx, hz, chi, D, E, infinite_tHooft, infinite_Wilson, infinite_Wilson_odd, FMstring, PKstring_odd))
+        push!(results, (hx, hz, chi, D, ξv[1], ξh[1], ξ_vumps))
 
+        # Log results
+        println(logfile, "D=$D, χ=$chi, hx=$hx, hz=$hz")
+        println(logfile, "horizontal spectrum: ", λh)
+        println(logfile, "vertical spectrum: ", λv)
+        println(logfile, "horizontal north spectrum: ", λ_h_north)
+        println(logfile, "horizontal south spectrum: ", λ_h_south)
+
+        println(logfile)  # empty line for separation
     catch e
         @warn "Skipping $file due to error" exception = e
     end
-end
 
-# Save to CSV
-CSV.write("strings.csv", results)
+end
+close(logfile)
+
+
+CSV.write("correlationlengths.csv", results)
+
+
